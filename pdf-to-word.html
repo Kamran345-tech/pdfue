@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF to Word Converter Online — Real Editable .docx | PDFUE</title>
+<meta name="description" content="Convert PDF to a genuinely editable Word document for free. Real selectable text is rebuilt into Word paragraphs, not an image of the page. Works best on text-based PDFs.">
+<meta name="keywords" content="pdf to word converter, pdf to docx, editable pdf to word, convert pdf to word free, pdf to word online">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://pdfue.com/pdf-to-word.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PDFUE">
+<meta property="og:title" content="PDF to Word Converter Online — Real Editable .docx | PDFUE">
+<meta property="og:description" content="Convert PDF to a genuinely editable Word document for free. Real selectable text is rebuilt into Word paragraphs, not an image of the page. Works best on text-based PDFs.">
+<meta property="og:url" content="https://pdfue.com/pdf-to-word.html">
+<meta property="og:image" content="https://pdfue.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PDF to Word Converter Online — Real Editable .docx | PDFUE">
+<meta name="twitter:description" content="Convert PDF to a genuinely editable Word document for free. Real selectable text is rebuilt into Word paragraphs, not an image of the page. Works best on text-based PDFs.">
+<meta name="twitter:image" content="https://pdfue.com/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "PDF to Word",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (runs in web browser)",
+      "url": "https://pdfue.com/pdf-to-word.html",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "isPartOf": {"@type": "WebSite", "name": "PDFUE", "url": "https://pdfue.com/"}
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "PDFUE", "item": "https://pdfue.com/"},
+        {"@type": "ListItem", "position": 2, "name": "PDF to Word", "item": "https://pdfue.com/pdf-to-word.html"}
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b14;
+    --card:rgba(255,255,255,0.045);
+    --card-hover:rgba(255,255,255,0.075);
+    --border:rgba(255,255,255,0.09);
+    --border-hover:rgba(255,255,255,0.18);
+    --text:#f4f5fb;
+    --muted:#9498b3;
+    --accent:#2457FF;
+    --accent-soft:rgba(36,87,255,0.16);
+    --accent-glow:rgba(36,87,255,0.5);
+    --violet:#C8FF3D;
+    --cyan:#22d3ee;
+    --pink:#f472b6;
+    --green:#34d399;
+    --red:#f87171;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+  ::selection{background:var(--accent);color:#0a0b14;}
+
+  body::before, body::after{
+    content:"";
+    position:fixed;
+    width:560px;height:560px;
+    border-radius:50%;
+    filter:blur(120px);
+    z-index:0;
+    opacity:.3;
+    pointer-events:none;
+  }
+  body::before{ top:-200px; left:-160px; background:radial-gradient(circle, var(--accent) 0%, transparent 70%); }
+  body::after{ bottom:-220px; right:-160px; background:radial-gradient(circle, var(--violet) 0%, transparent 70%); }
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+
+  nav.sitebar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:24px 24px;max-width:920px;margin:0 auto;position:relative;z-index:2;
+  }
+  .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;gap:9px;color:var(--text);text-decoration:none;background:linear-gradient(100deg, var(--cobalt, #2457FF), var(--lime, #C8FF3D));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .logo .dot{width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg, var(--accent), var(--violet));box-shadow:0 0 16px 2px var(--accent-glow);}
+  .backlink{font-size:12.5px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .15s;}
+  .backlink:hover{color:var(--text);}
+
+  header.brandbar{ padding:20px 24px 10px; }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);border:1px solid var(--border);
+    padding:7px 16px;border-radius:100px;
+    font-size:12.5px;color:var(--muted);
+    backdrop-filter:blur(8px);
+    margin-bottom:18px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px 2px var(--accent-glow);}
+
+  h1{
+    font-family:'Sora',sans-serif;font-weight:800;
+    font-size:clamp(32px,6vw,52px);letter-spacing:-.02em;
+    line-height:1.05;margin:0 0 16px;
+  }
+  h1 span{
+    background:linear-gradient(100deg, var(--accent), var(--violet));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .tagline{color:var(--muted);font-size:15.5px;max-width:640px;line-height:1.65;}
+  .tagline b{color:var(--text);font-weight:600;}
+
+  main{padding:30px 24px 70px;position:relative;z-index:1;}
+  section{margin-bottom:28px;}
+  .section-label{
+    font-family:'Sora',sans-serif;font-weight:600;
+    font-size:12.5px;letter-spacing:.02em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .section-label::after{content:"";flex:1;height:1px;background:var(--border);}
+
+  .dropzone{
+    border:1.5px dashed var(--border-hover);
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:42px 20px;text-align:center;cursor:pointer;
+    transition:border-color .2s, background .2s, box-shadow .2s;
+    backdrop-filter:blur(8px);
+  }
+  .dropzone.dragover{
+    border-color:var(--accent);border-style:solid;
+    background:var(--accent-soft);
+    box-shadow:0 0 0 4px rgba(36,87,255,0.15);
+  }
+  .dz-title{font-family:'Sora',sans-serif;font-weight:600;font-size:17px;color:var(--text);}
+  .dz-sub{color:var(--muted);font-size:13px;margin-top:6px;}
+  input[type=file]{display:none;}
+
+  .filecard{
+    display:none;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    backdrop-filter:blur(8px);
+  }
+  .filecard.show{display:flex;}
+  .filemeta{font-size:12.5px;color:var(--muted);}
+  .filemeta b{color:var(--text);font-weight:600;}
+  .filemeta .name{color:var(--accent);}
+  button.ghost{
+    background:transparent;border:1px solid var(--border);color:var(--muted);
+    font-size:11.5px;
+    padding:7px 14px;border-radius:10px;cursor:pointer;
+    transition:border-color .15s, color .15s;
+  }
+  button.ghost:hover{border-color:var(--red);color:var(--text);}
+
+  .error-msg{
+    display:none;
+    color:#f0a58a;
+    background:rgba(248,113,113,0.1);
+    border:1px solid var(--red);
+    padding:10px 14px;
+    font-size:12.5px;
+    border-radius:12px;
+    margin-top:10px;
+  }
+  .error-msg.show{display:block;}
+
+  .note-msg{
+    display:none;
+    color:#6f8dff;
+    background:rgba(36,87,255,0.1);
+    border:1px solid var(--accent);
+    padding:10px 14px;
+    font-size:12.5px;
+    border-radius:12px;
+    margin-top:14px;
+    line-height:1.55;
+  }
+  .note-msg.show{display:block;}
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:18px 20px;
+    border-radius:var(--radius);
+    margin-top:16px;
+    backdrop-filter:blur(8px);
+  }
+  .totals{font-size:12.5px;color:var(--muted);}
+  .totals b{color:var(--text);font-weight:600;}
+
+  button.primary{
+    font-family:'Sora',sans-serif;font-weight:600;font-size:14px;
+    background:linear-gradient(100deg, var(--accent), var(--violet));
+    color:#0a0b14;border:none;padding:12px 26px;border-radius:12px;
+    cursor:pointer;transition:transform .15s, box-shadow .2s;
+  }
+  button.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px var(--accent-glow);}
+  button.primary:active{transform:scale(.97);}
+  button.primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+  .progress-wrap{display:none;margin-top:14px;}
+  .progress-wrap.show{display:block;}
+  .progress-track{
+    height:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;
+  }
+  .progress-fill{height:100%;width:0%;background:linear-gradient(90deg, var(--accent), var(--violet));transition:width .15s;}
+  .progress-text{
+    font-size:12.5px;color:var(--muted);margin-top:8px;
+  }
+  .progress-text b{color:var(--accent);}
+
+  .stage{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:var(--radius);
+    min-height:140px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    text-align:center;
+    backdrop-filter:blur(8px);
+  }
+  .stage.empty::after{
+    content:"Your Word document will appear here";
+    font-size:13px;color:var(--muted);
+  }
+  .stage .result-icon{margin-bottom:10px;}
+
+  .status-row{
+    display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:16px;
+    font-size:12.5px;color:var(--muted);
+  }
+  .status-row b{color:var(--text);font-weight:600;}
+  .status-row .ok{color:var(--green);}
+  .status-row .warn{color:var(--accent);}
+
+  .download-row{margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+  a.download-btn{
+    font-family:'Sora',sans-serif;font-weight:600;font-size:14px;
+    background:transparent;color:var(--text);border:1.5px solid var(--border-hover);
+    padding:11px 24px;border-radius:12px;text-decoration:none;display:inline-block;
+    transition:background .2s, border-color .2s, transform .15s;
+  }
+  a.download-btn.ready{border-color:var(--accent);}
+  a.download-btn.ready:hover{background:var(--accent-soft);transform:translateY(-2px);}
+  a.download-btn.disabled{opacity:.35;pointer-events:none;}
+
+  footer{
+    text-align:center;padding:40px 20px 30px;color:var(--muted);font-size:12.5px;position:relative;z-index:1;
+  }
+
+  @media (max-width:520px){
+    header.brandbar{padding:16px 16px 6px;}
+    main{padding:24px 16px 60px;}
+    .controls{flex-direction:column;align-items:stretch;}
+    .controls button.primary{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="sitebar">
+  <a class="logo" href="./index.html">PDFUE</a>
+  <div style="display:flex;align-items:center;gap:18px;">
+    <a class="backlink" href="./blog/index.html">Blog</a>
+    <a class="backlink" href="./index.html">&larr; All Tools</a>
+  </div>
+</nav>
+
+<header class="brandbar">
+  <div class="wrap" style="padding:0;">
+    <span class="eyebrow">PDF to Word</span>
+    <h1>PDF to <span>Word</span></h1>
+    <p class="tagline">Upload a PDF and get back a <b>real, editable .docx</b> — actual selectable text rebuilt into Word paragraphs, not a picture of the page. Works best on text-based PDFs; <b>scanned/image-only pages have no text layer to extract</b>, and you'll be told which pages those are.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h2 class="section-label">01 · Upload PDF</h2>
+    <div class="dropzone" id="dropzone">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6f8dff" stroke-width="1.5" style="margin-bottom:10px;" aria-hidden="true">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <path d="M14 2v6h6"/>
+        <path d="M9 13h6M9 17h4"/>
+      </svg>
+      <div class="dz-title">Click to browse, or drag &amp; drop a PDF anywhere</div>
+      <div class="dz-sub">Single PDF file · text-based works best</div>
+      <input type="file" id="fileInput" accept="application/pdf">
+    </div>
+    <div class="filecard" id="filecard">
+      <div class="filemeta"><span class="name" id="fname"></span> — <b id="fsize"></b> — <b id="fpages"></b></div>
+      <button class="ghost" id="clearBtn">Remove</button>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="note-msg" id="noteMsg"></div>
+  </section>
+
+  <section id="controlsSection" style="display:none;">
+    <h2 class="section-label">02 · Convert</h2>
+    <div class="controls">
+      <span class="totals" id="totalsText"></span>
+      <button class="primary" id="convertBtn">Convert to Word</button>
+    </div>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-label">03 · Result</h2>
+    <div class="stage empty" id="stage"></div>
+    <div class="status-row" id="statusRow"></div>
+    <div class="download-row">
+      <a href="#" class="download-btn disabled" id="downloadBtn">Download .docx</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>Everything runs in your browser — your PDF is never uploaded to a server.</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  const MAX_BYTES = 500 * 1024 * 1024;
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const filecard = document.getElementById('filecard');
+  const fname = document.getElementById('fname');
+  const fsize = document.getElementById('fsize');
+  const fpages = document.getElementById('fpages');
+  const clearBtn = document.getElementById('clearBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const noteMsg = document.getElementById('noteMsg');
+  const controlsSection = document.getElementById('controlsSection');
+  const totalsText = document.getElementById('totalsText');
+  const convertBtn = document.getElementById('convertBtn');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+  const stage = document.getElementById('stage');
+  const statusRow = document.getElementById('statusRow');
+  const downloadBtn = document.getElementById('downloadBtn');
+
+  let currentFile = null;
+  let currentPdf = null;
+  let baseName = 'document';
+  let lastObjectUrl = null;
+
+  function humanSize(bytes){
+    if(bytes > 1024*1024) return (bytes/(1024*1024)).toFixed(1) + ' MB';
+    return (bytes/1024).toFixed(0) + ' KB';
+  }
+  function showError(msg){ errorMsg.textContent = msg; errorMsg.classList.add('show'); }
+  function clearError(){ errorMsg.classList.remove('show'); errorMsg.textContent=''; }
+  function showNote(msg){ noteMsg.textContent = msg; noteMsg.classList.add('show'); }
+  function clearNote(){ noteMsg.classList.remove('show'); noteMsg.textContent=''; }
+
+  dropzone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+
+  ['dragenter','dragover','drop'].forEach(evt=>{
+    window.addEventListener(evt, e => e.preventDefault());
+  });
+  let dragDepth = 0;
+  document.body.addEventListener('dragenter', e=>{ e.preventDefault(); dragDepth++; dropzone.classList.add('dragover'); });
+  document.body.addEventListener('dragover', e => e.preventDefault());
+  document.body.addEventListener('dragleave', e=>{
+    e.preventDefault();
+    dragDepth = Math.max(0, dragDepth-1);
+    if(dragDepth===0) dropzone.classList.remove('dragover');
+  });
+  document.body.addEventListener('drop', e=>{
+    e.preventDefault();
+    dragDepth = 0;
+    dropzone.classList.remove('dragover');
+    if(e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+
+  clearBtn.addEventListener('click', resetAll);
+
+  function resetAll(){
+    currentFile = null;
+    currentPdf = null;
+    filecard.classList.remove('show');
+    controlsSection.style.display = 'none';
+    clearError();
+    clearNote();
+    resetStage();
+    fileInput.value = '';
+  }
+
+  function resetStage(){
+    stage.classList.add('empty');
+    stage.innerHTML = '';
+    statusRow.innerHTML = '';
+    downloadBtn.classList.add('disabled');
+    downloadBtn.classList.remove('ready');
+    downloadBtn.removeAttribute('href');
+    downloadBtn.removeAttribute('download');
+    if(lastObjectUrl){ URL.revokeObjectURL(lastObjectUrl); lastObjectUrl = null; }
+    progressWrap.classList.remove('show');
+    progressFill.style.width = '0%';
+  }
+
+  async function handleFile(file){
+    clearError();
+    clearNote();
+    resetStage();
+
+    if(file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')){
+      showError('Please choose a PDF file.');
+      return;
+    }
+    if(file.size > MAX_BYTES){
+      showError(`File is ${humanSize(file.size)} — max allowed is 500 MB.`);
+      return;
+    }
+
+    currentFile = file;
+    baseName = file.name.replace(/\.pdf$/i, '') || 'document';
+    fname.textContent = file.name;
+    fsize.textContent = humanSize(file.size);
+    fpages.textContent = 'reading…';
+    filecard.classList.add('show');
+
+    try{
+      const buf = await file.arrayBuffer();
+      currentPdf = await pdfjsLib.getDocument({ data: buf }).promise;
+      fpages.textContent = currentPdf.numPages + (currentPdf.numPages > 1 ? ' pages' : ' page');
+      controlsSection.style.display = 'block';
+      totalsText.innerHTML = `<b>${currentPdf.numPages}</b> page${currentPdf.numPages>1?'s':''} to convert`;
+    }catch(err){
+      showError('Could not read this PDF. It may be corrupted or password-protected.');
+      fpages.textContent = 'error';
+    }
+  }
+
+  // ---------- Text extraction: group items into lines ----------
+  function extractLines(items){
+    const groups = [];
+    items.forEach(it => {
+      if(!it.str) return;
+      const y = it.transform[5];
+      let group = groups.find(g => Math.abs(g.y - y) < 2.5);
+      if(!group){
+        group = { y, items: [] };
+        groups.push(group);
+      }
+      group.items.push(it);
+    });
+    groups.sort((a,b) => b.y - a.y); // top to bottom
+    return groups.map(g => {
+      g.items.sort((a,b) => a.transform[4] - b.transform[4]);
+      return {
+        y: g.y,
+        text: g.items.map(i => i.str).join(' ').replace(/\s+/g, ' ').trim()
+      };
+    }).filter(l => l.text.length > 0);
+  }
+
+  function xmlEscape(str){
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+  }
+
+  function paragraphXml(text){
+    return `<w:p><w:r><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
+  }
+  const emptyParagraphXml = '<w:p/>';
+  const pageBreakXml = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+
+  async function buildDocx(pagesLines){
+    const zip = new JSZip();
+
+    zip.file('[Content_Types].xml',
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+<Default Extension="xml" ContentType="application/xml"/>
+<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
+<Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
+</Types>`);
+
+    zip.folder('_rels').file('.rels',
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>
+<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>
+</Relationships>`);
+
+    zip.folder('docProps').file('core.xml',
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<dc:title>${xmlEscape(baseName)}</dc:title>
+<dc:creator>PDFUE PDF to Word</dc:creator>
+</cp:coreProperties>`);
+
+    zip.folder('docProps').file('app.xml',
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">
+<Application>PDFUE PDF to Word</Application>
+</Properties>`);
+
+    const bodyParts = [];
+    pagesLines.forEach((lines, pageIdx) => {
+      if(pageIdx > 0) bodyParts.push(pageBreakXml);
+
+      if(lines.length === 0){
+        bodyParts.push(paragraphXml(`[Page ${pageIdx+1} has no selectable text — likely a scanned image]`));
+        return;
+      }
+
+      let prevY = null;
+      lines.forEach(line => {
+        if(prevY !== null && (prevY - line.y) > 22){
+          bodyParts.push(emptyParagraphXml);
+        }
+        bodyParts.push(paragraphXml(line.text));
+        prevY = line.y;
+      });
+    });
+
+    const documentXml =
+`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<w:body>
+${bodyParts.join('\n')}
+<w:sectPr>
+<w:pgSz w:w="11906" w:h="16838"/>
+<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
+</w:sectPr>
+</w:body>
+</w:document>`;
+
+    zip.folder('word').file('document.xml', documentXml);
+
+    return zip.generateAsync({
+      type: 'blob',
+      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    });
+  }
+
+  convertBtn.addEventListener('click', convertToWord);
+
+  async function convertToWord(){
+    if(!currentPdf) return;
+    convertBtn.disabled = true;
+    resetStage();
+    clearNote();
+    stage.classList.remove('empty');
+    progressWrap.classList.add('show');
+
+    const numPages = currentPdf.numPages;
+    const pagesLines = [];
+    let scannedPages = 0;
+
+    for(let i = 1; i <= numPages; i++){
+      progressText.innerHTML = `Reading text from page <b>${i}</b> of <b>${numPages}</b>…`;
+      progressFill.style.width = `${((i-1)/numPages)*90}%`;
+
+      const page = await currentPdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const lines = extractLines(textContent.items);
+      if(lines.length === 0) scannedPages++;
+      pagesLines.push(lines);
+    }
+
+    progressText.innerHTML = 'Building Word document…';
+    progressFill.style.width = '95%';
+
+    const blob = await buildDocx(pagesLines);
+
+    progressFill.style.width = '100%';
+    progressText.innerHTML = `<span style="color:var(--green)">Done — ${numPages} page${numPages>1?'s':''} converted.</span>`;
+
+    lastObjectUrl = URL.createObjectURL(blob);
+    stage.innerHTML = `
+      <div class="result-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#6f8dff" stroke-width="1.5" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 2v6h6"/>
+          <path d="M9 13h6M9 17h4"/>
+        </svg>
+      </div>
+      <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:16px;">${baseName}.docx</div>
+    `;
+
+    statusRow.innerHTML = `
+      <span>Pages: <b>${numPages}</b></span>
+      <span>File size: <b class="ok">${humanSize(blob.size)}</b></span>
+      <span>Text: <b class="ok">real, editable</b></span>
+      ${scannedPages > 0 ? `<span>Scanned pages (no text found): <b class="warn">${scannedPages}</b></span>` : ''}
+    `;
+
+    if(scannedPages > 0){
+      showNote(`Heads up: ${scannedPages} of ${numPages} page${numPages>1?'s':''} had no selectable text (likely scanned images), so ${scannedPages>1?'those pages are':'that page is'} marked as-is in the document instead of extracted text. Everything else converted to fully editable text.`);
+    }
+
+    downloadBtn.href = lastObjectUrl;
+    downloadBtn.download = `${baseName}.docx`;
+    downloadBtn.classList.remove('disabled');
+    downloadBtn.classList.add('ready');
+
+    convertBtn.disabled = false;
+  }
+
+})();
+</script>
+
+</body>
+</html>

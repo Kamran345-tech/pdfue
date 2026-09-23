@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photo Collage Maker Online — Auto-Fit, No Crop, Under 1MB | PDFUE</title>
+<meta name="description" content="Free online photo collage maker. Upload any number of photos, layout auto-adjusts with no cropping, and the final collage auto-compresses to under 1MB. No sign-up needed.">
+<meta name="keywords" content="photo collage maker online, multi photo collage, no crop collage tool, compress collage under 1mb, free collage maker">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://pdfue.com/photo-collage.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PDFUE">
+<meta property="og:title" content="Photo Collage Maker Online — Auto-Fit, No Crop, Under 1MB | PDFUE">
+<meta property="og:description" content="Free online photo collage maker. Upload any number of photos, layout auto-adjusts with no cropping, and the final collage auto-compresses to under 1MB. No sign-up needed.">
+<meta property="og:url" content="https://pdfue.com/photo-collage.html">
+<meta property="og:image" content="https://pdfue.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Photo Collage Maker Online — Auto-Fit, No Crop, Under 1MB | PDFUE">
+<meta name="twitter:description" content="Free online photo collage maker. Upload any number of photos, layout auto-adjusts with no cropping, and the final collage auto-compresses to under 1MB. No sign-up needed.">
+<meta name="twitter:image" content="https://pdfue.com/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Photo Collage",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any (runs in web browser)",
+      "url": "https://pdfue.com/photo-collage.html",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "isPartOf": {"@type": "WebSite", "name": "PDFUE", "url": "https://pdfue.com/"}
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "PDFUE", "item": "https://pdfue.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Photo Collage", "item": "https://pdfue.com/photo-collage.html"}
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b14;
+    --card:rgba(255,255,255,0.045);
+    --card-hover:rgba(255,255,255,0.075);
+    --border:rgba(255,255,255,0.09);
+    --border-hover:rgba(255,255,255,0.18);
+    --text:#f4f5fb;
+    --muted:#9498b3;
+    --accent:#2457FF;
+    --accent-soft:rgba(36,87,255,0.16);
+    --accent-glow:rgba(36,87,255,0.55);
+    --cyan:#C8FF3D;
+    --pink:#f472b6;
+    --green:#34d399;
+    --red:#f87171;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+  ::selection{background:var(--accent);color:#fff;}
+
+  body::before, body::after{
+    content:"";
+    position:fixed;
+    width:560px;height:560px;
+    border-radius:50%;
+    filter:blur(120px);
+    z-index:0;
+    opacity:.3;
+    pointer-events:none;
+  }
+  body::before{ top:-200px; left:-160px; background:radial-gradient(circle, var(--accent) 0%, transparent 70%); }
+  body::after{ bottom:-220px; right:-160px; background:radial-gradient(circle, var(--cyan) 0%, transparent 70%); }
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+
+  nav.sitebar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:24px 24px;max-width:920px;margin:0 auto;position:relative;z-index:2;
+  }
+  .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;gap:9px;color:var(--text);text-decoration:none;background:linear-gradient(100deg, var(--cobalt, #2457FF), var(--lime, #C8FF3D));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .logo .dot{width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg, var(--accent), var(--cyan));box-shadow:0 0 16px 2px var(--accent-glow);}
+  .backlink{font-size:12.5px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .15s;}
+  .backlink:hover{color:var(--text);}
+
+  header.brandbar{ padding:20px 24px 10px; }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);border:1px solid var(--border);
+    padding:7px 16px;border-radius:100px;
+    font-size:12.5px;color:var(--muted);
+    backdrop-filter:blur(8px);
+    margin-bottom:18px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px 2px var(--accent-glow);}
+
+  h1{
+    font-family:'Sora',sans-serif;font-weight:800;
+    font-size:clamp(32px,6vw,52px);letter-spacing:-.02em;
+    line-height:1.05;margin:0 0 16px;
+  }
+  h1 span{
+    background:linear-gradient(100deg, var(--accent), var(--cyan));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .tagline{color:var(--muted);font-size:15.5px;max-width:600px;line-height:1.65;}
+  .tagline b{color:var(--text);font-weight:600;}
+
+  main{padding:30px 24px 70px;position:relative;z-index:1;}
+  section{margin-bottom:28px;}
+  .section-label{
+    font-family:'Sora',sans-serif;font-weight:600;
+    font-size:12.5px;letter-spacing:.02em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .section-label::after{content:"";flex:1;height:1px;background:var(--border);}
+
+  .dropzone{
+    border:1.5px dashed var(--border-hover);
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:42px 20px;text-align:center;cursor:pointer;
+    transition:border-color .2s, background .2s, box-shadow .2s;
+    backdrop-filter:blur(8px);
+  }
+  .dropzone.dragover{
+    border-color:var(--accent);border-style:solid;
+    background:var(--accent-soft);
+    box-shadow:0 0 0 4px rgba(36,87,255,0.15);
+    animation:pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 4px rgba(36,87,255,0.15);}
+    50%{box-shadow:0 0 0 9px rgba(36,87,255,0.08);}
+  }
+  .dropzone svg{opacity:.9;margin-bottom:12px;}
+  .dz-title{font-family:'Sora',sans-serif;font-weight:600;font-size:17px;color:var(--text);}
+  .dz-sub{color:var(--muted);font-size:13px;margin-top:6px;}
+  input[type=file]{display:none;}
+
+  .thumbstrip{display:flex;gap:10px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:thin;}
+  .thumbstrip:empty{display:none;}
+  .thumb{
+    position:relative;flex:0 0 auto;width:76px;height:76px;
+    border-radius:12px;overflow:hidden;
+    border:1px solid var(--border);background:var(--card);
+    cursor:grab;transition:transform .12s, opacity .12s, border-color .12s;
+  }
+  .thumb:active{cursor:grabbing;}
+  .thumb.dragging{opacity:.35;}
+  .thumb.drag-over{border-color:var(--accent);transform:scale(1.05);}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .thumb .idx{
+    position:absolute;top:4px;left:4px;
+    font-size:9.5px;font-weight:600;color:#fff;
+    background:rgba(0,0,0,.55);padding:1px 5px;border-radius:6px;
+  }
+  .thumb .rm{
+    position:absolute;top:3px;right:3px;width:18px;height:18px;
+    background:rgba(0,0,0,.65);border:none;color:#fff;border-radius:50%;
+    font-size:12px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .thumb .rm:hover{background:var(--red);}
+
+  .count-readout{font-size:12.5px;color:var(--muted);margin-top:8px;}
+  .count-readout b{color:var(--accent);}
+
+  .controls{
+    display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-content:space-between;
+    background:var(--card);border:1px solid var(--border);
+    padding:18px 20px;border-radius:var(--radius);backdrop-filter:blur(8px);
+  }
+  .swatch-group{display:flex;gap:8px;align-items:center;}
+  .swatch-group .lbl{font-size:12.5px;color:var(--muted);margin-right:4px;}
+  .swatch{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;}
+  .swatch[data-c="paper"]{background:#f2ead9;}
+  .swatch[data-c="white"]{background:#ffffff;}
+  .swatch[data-c="black"]{background:#0a0a0a;}
+  .swatch.active{border-color:var(--accent);}
+
+  button.primary{
+    font-family:'Sora',sans-serif;font-weight:600;font-size:14px;
+    background:linear-gradient(100deg, var(--accent), var(--cyan));
+    color:#0a0b14;border:none;padding:12px 24px;border-radius:12px;
+    cursor:pointer;transition:transform .15s, box-shadow .2s;
+  }
+  button.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px var(--accent-glow);}
+  button.primary:active{transform:scale(.97);}
+  button.primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+  .stage{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:var(--radius);
+    min-height:220px;display:flex;align-items:center;justify-content:center;
+    padding:16px;position:relative;backdrop-filter:blur(8px);
+  }
+  .stage.empty::after{content:"Your collage will develop here";font-size:13px;color:var(--muted);}
+  .stage img{max-width:100%;max-height:520px;display:block;border-radius:10px;box-shadow:0 20px 50px -14px rgba(0,0,0,.6);}
+  .stage .processing{font-size:13px;color:var(--accent);}
+
+  .status-row{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:16px;font-size:12.5px;color:var(--muted);}
+  .status-row b{color:var(--text);font-weight:600;}
+  .status-row .ok{color:var(--green);}
+
+  .download-row{margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+  a.download-btn{
+    font-family:'Sora',sans-serif;font-weight:600;font-size:14px;
+    background:transparent;color:var(--text);border:1.5px solid var(--border-hover);
+    padding:11px 24px;border-radius:12px;text-decoration:none;display:inline-block;
+    transition:background .2s, border-color .2s, transform .15s;
+  }
+  a.download-btn.ready{border-color:var(--accent);}
+  a.download-btn.ready:hover{background:var(--accent-soft);transform:translateY(-2px);}
+  a.download-btn.disabled{opacity:.35;pointer-events:none;}
+
+  footer{text-align:center;padding:40px 20px 30px;color:var(--muted);font-size:12.5px;position:relative;z-index:1;}
+
+  @media (max-width:520px){
+    header.brandbar{padding:16px 16px 6px;}
+    main{padding:24px 16px 60px;}
+    .controls{flex-direction:column;align-items:stretch;}
+    .controls button.primary{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="sitebar">
+  <a class="logo" href="./index.html">PDFUE</a>
+  <div style="display:flex;align-items:center;gap:18px;">
+    <a class="backlink" href="./blog/index.html">Blog</a>
+    <a class="backlink" href="./index.html">&larr; All Tools</a>
+  </div>
+</nav>
+
+<header class="brandbar">
+  <div class="wrap" style="padding:0;">
+    <span class="eyebrow">Contact Sheet</span>
+    <h1>Photo <span>Collage</span></h1>
+    <p class="tagline">Upload as many photos as you like — every photo shows <b>fully, no cropping</b>, arranged edge-to-edge with just a thin margin between them, and the layout adjusts itself to how many pictures you add. Final collage is auto-compressed to <b>under 1&nbsp;MB</b>.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h2 class="section-label">01 · Load Photos</h2>
+    <div class="dropzone" id="dropzone">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#6f8dff" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+      <div class="dz-title">Click to browse, or drag &amp; drop photos anywhere on this page</div>
+      <div class="dz-sub">JPG, PNG, WEBP — any number of images</div>
+      <input type="file" id="fileInput" accept="image/*" multiple>
+    </div>
+    <div class="thumbstrip" id="thumbstrip"></div>
+    <div class="count-readout" id="countReadout"></div>
+    <div class="count-readout" id="reorderHint" style="display:none;">Drag a thumbnail to reorder — collage updates automatically.</div>
+  </section>
+
+  <section id="controlsSection" style="display:none;">
+    <h2 class="section-label">02 · Frame Background</h2>
+    <div class="controls">
+      <div class="swatch-group">
+        <span class="lbl">Margin colour (thin gap between photos):</span>
+        <span class="swatch active" data-c="paper" title="Paper"></span>
+        <span class="swatch" data-c="white" title="White"></span>
+        <span class="swatch" data-c="black" title="Black"></span>
+      </div>
+      <button class="primary" id="regenBtn">Regenerate Collage</button>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-label">03 · Result</h2>
+    <div class="stage empty" id="stage"></div>
+    <div class="status-row" id="statusRow"></div>
+    <div class="download-row">
+      <a href="#" class="download-btn disabled" id="downloadBtn" download="collage.jpg">Download Collage</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>Photos process entirely in your browser — nothing is uploaded anywhere.</footer>
+
+<script>
+(function(){
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const thumbstrip = document.getElementById('thumbstrip');
+  const countReadout = document.getElementById('countReadout');
+  const reorderHint = document.getElementById('reorderHint');
+  const controlsSection = document.getElementById('controlsSection');
+  const stage = document.getElementById('stage');
+  const statusRow = document.getElementById('statusRow');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const regenBtn = document.getElementById('regenBtn');
+  const swatches = document.querySelectorAll('.swatch');
+
+  const MAX_BYTES = 1024 * 1024; // 1 MB
+  const COLORS = { paper:'#f2ead9', white:'#ffffff', black:'#0a0a0a' };
+  let bgChoice = 'paper';
+
+  let files = []; // { file, url }
+  let currentObjectUrl = null;
+  let genToken = 0; // guards against overlapping regenerations
+
+  // ---------- Upload handling ----------
+  dropzone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => addFiles(e.target.files));
+
+  // Stop the browser from opening dropped images in a new tab anywhere on the page
+  ['dragenter','dragover','drop'].forEach(evt=>{
+    window.addEventListener(evt, e => e.preventDefault());
+  });
+
+  // Whole page accepts drag-and-drop, not just the dashed box
+  let dragDepth = 0;
+  ['dragenter'].forEach(evt=>{
+    document.body.addEventListener(evt, e=>{
+      e.preventDefault();
+      dragDepth++;
+      dropzone.classList.add('dragover');
+    });
+  });
+  document.body.addEventListener('dragover', e => e.preventDefault());
+  document.body.addEventListener('dragleave', e=>{
+    e.preventDefault();
+    dragDepth = Math.max(0, dragDepth - 1);
+    if(dragDepth === 0) dropzone.classList.remove('dragover');
+  });
+  document.body.addEventListener('drop', e=>{
+    e.preventDefault();
+    dragDepth = 0;
+    dropzone.classList.remove('dragover');
+    if(e.dataTransfer.files && e.dataTransfer.files.length){
+      addFiles(e.dataTransfer.files);
+    }
+  });
+
+  function addFiles(fileList){
+    const imgs = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+    imgs.forEach(f => files.push({ file:f, url:URL.createObjectURL(f) }));
+    fileInput.value = '';
+    renderThumbs();
+    if(files.length) controlsSection.style.display = 'block';
+    scheduleGenerate();
+  }
+
+  function removeFile(idx){
+    URL.revokeObjectURL(files[idx].url);
+    files.splice(idx,1);
+    renderThumbs();
+    if(!files.length){
+      controlsSection.style.display = 'none';
+      resetStage();
+    } else {
+      scheduleGenerate();
+    }
+  }
+
+  let dragSrcIndex = null;
+
+  function renderThumbs(){
+    thumbstrip.innerHTML = '';
+    files.forEach((f, i) => {
+      const div = document.createElement('div');
+      div.className = 'thumb';
+      div.draggable = true;
+      div.dataset.idx = i;
+      div.innerHTML = `<span class="idx">${i+1}</span><img src="${f.url}"><button class="rm" title="Remove">&times;</button>`;
+      div.querySelector('.rm').addEventListener('click', () => removeFile(i));
+
+      div.addEventListener('dragstart', e => {
+        dragSrcIndex = i;
+        div.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        // Firefox needs data set to allow drag
+        e.dataTransfer.setData('text/plain', String(i));
+      });
+      div.addEventListener('dragend', () => {
+        div.classList.remove('dragging');
+        thumbstrip.querySelectorAll('.thumb').forEach(t => t.classList.remove('drag-over'));
+      });
+      div.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        div.classList.add('drag-over');
+      });
+      div.addEventListener('dragleave', () => div.classList.remove('drag-over'));
+      div.addEventListener('drop', e => {
+        e.preventDefault();
+        div.classList.remove('drag-over');
+        const targetIdx = Number(div.dataset.idx);
+        if (dragSrcIndex === null || dragSrcIndex === targetIdx) return;
+        const [moved] = files.splice(dragSrcIndex, 1);
+        files.splice(targetIdx, 0, moved);
+        dragSrcIndex = null;
+        renderThumbs();
+        scheduleGenerate();
+      });
+
+      thumbstrip.appendChild(div);
+    });
+    countReadout.textContent = files.length
+      ? `${files.length} photo${files.length>1?'s':''} loaded`
+      : '';
+    reorderHint.style.display = files.length > 1 ? 'block' : 'none';
+  }
+
+  swatches.forEach(sw=>{
+    sw.addEventListener('click', ()=>{
+      swatches.forEach(s=>s.classList.remove('active'));
+      sw.classList.add('active');
+      bgChoice = sw.dataset.c;
+      scheduleGenerate();
+    });
+  });
+
+  regenBtn.addEventListener('click', scheduleGenerate);
+
+  function resetStage(){
+    stage.classList.add('empty');
+    stage.innerHTML = '';
+    statusRow.innerHTML = '';
+    downloadBtn.classList.add('disabled');
+    downloadBtn.classList.remove('ready');
+  }
+
+  let debounceTimer = null;
+  function scheduleGenerate(){
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(generateCollage, 250);
+  }
+
+  // ---------- Justified layout: every photo shown whole (no crop), rows stretched to fill full width, no dead space ----------
+  function planRows(images, canvasWidth, gap, targetRowHeight){
+    const rows = [];
+    let row = [];
+    let widthSum = 0;
+    images.forEach(img => {
+      const ar = img.width / img.height;
+      const w = ar * targetRowHeight;
+      if (row.length > 0 && widthSum + w + gap * row.length > canvasWidth) {
+        rows.push(row);
+        row = [];
+        widthSum = 0;
+      }
+      row.push({ img, ar });
+      widthSum += w;
+    });
+    if (row.length) rows.push(row);
+    return rows;
+  }
+
+  function layoutRows(rows, canvasWidth, gap){
+    let y = gap;
+    const laidOut = [];
+    rows.forEach(row => {
+      const arSum = row.reduce((s, it) => s + it.ar, 0);
+      const rowHeight = (canvasWidth - gap * (row.length + 1)) / arSum;
+      let x = gap;
+      const items = row.map(it => {
+        const w = it.ar * rowHeight;
+        const item = { img: it.img, x, y, w, h: rowHeight };
+        x += w + gap;
+        return item;
+      });
+      laidOut.push(items);
+      y += rowHeight + gap;
+    });
+    return { items: laidOut.flat(), totalHeight: y };
+  }
+
+  function loadImage(url){
+    return new Promise((resolve, reject)=>{
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  async function generateCollage(){
+    if(!files.length) return;
+    const myToken = ++genToken;
+
+    stage.classList.remove('empty');
+    stage.innerHTML = '<div class="processing">Developing collage…</div>';
+    statusRow.innerHTML = '';
+    downloadBtn.classList.add('disabled');
+    downloadBtn.classList.remove('ready');
+
+    let images;
+    try{
+      images = await Promise.all(files.map(f => loadImage(f.url)));
+    }catch(err){
+      stage.innerHTML = '<div class="processing">Could not read one of the images.</div>';
+      return;
+    }
+    if(myToken !== genToken) return; // a newer generation started
+
+    const n = images.length;
+    const GAP = 6;
+    const CANVAS_W = 1400;
+
+    // Seed row height — smaller as photo count grows, rows self-adjust to justify anyway
+    const targetRowHeight = Math.max(140, Math.min(480, CANVAS_W / Math.ceil(Math.sqrt(n))));
+
+    const rows = planRows(images, CANVAS_W, GAP, targetRowHeight);
+    let { items, totalHeight } = layoutRows(rows, CANVAS_W, GAP);
+
+    // Cap overall canvas so downstream compression has an easier time — uniform scale, layout stays intact
+    const MAX_DIM = 2600;
+    let canvasW = CANVAS_W, canvasH = totalHeight;
+    if (canvasW > MAX_DIM || canvasH > MAX_DIM) {
+      const s = MAX_DIM / Math.max(canvasW, canvasH);
+      items = items.map(it => ({ img: it.img, x: it.x * s, y: it.y * s, w: it.w * s, h: it.h * s }));
+      canvasW = Math.round(canvasW * s);
+      canvasH = Math.round(canvasH * s);
+    } else {
+      canvasW = Math.round(canvasW);
+      canvasH = Math.round(canvasH);
+    }
+
+    function drawFull(w, h, laidOutItems){
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = COLORS[bgChoice];
+      ctx.fillRect(0, 0, w, h);
+      laidOutItems.forEach(it => {
+        ctx.drawImage(it.img, it.x, it.y, it.w, it.h); // exact aspect ratio — whole photo, no crop
+      });
+      return canvas;
+    }
+
+    let canvas = drawFull(canvasW, canvasH, items);
+
+    // ---------- Auto-compress to under 1MB ----------
+    async function toBlob(cnv, quality){
+      return new Promise(resolve => cnv.toBlob(resolve, 'image/jpeg', quality));
+    }
+
+    let quality = 0.92;
+    let blob = await toBlob(canvas, quality);
+    let attempts = 0;
+
+    while (blob.size > MAX_BYTES && attempts < 18) {
+      attempts++;
+      if (quality > 0.35) {
+        quality -= 0.08;
+      } else {
+        // quality is already low — downscale the rendered canvas itself (layout stays intact)
+        const shrunk = document.createElement('canvas');
+        shrunk.width = Math.max(1, Math.floor(canvas.width * 0.85));
+        shrunk.height = Math.max(1, Math.floor(canvas.height * 0.85));
+        const sctx = shrunk.getContext('2d');
+        sctx.drawImage(canvas, 0, 0, shrunk.width, shrunk.height);
+        canvas = shrunk;
+        quality = 0.75; // reset quality a bit after downscaling
+      }
+      blob = await toBlob(canvas, quality);
+    }
+
+    if(myToken !== genToken) return;
+
+    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = URL.createObjectURL(blob);
+
+    stage.innerHTML = `<img src="${currentObjectUrl}" alt="Collage preview">`;
+
+    const kb = (blob.size / 1024).toFixed(0);
+    const mb = (blob.size / (1024*1024)).toFixed(2);
+    const sizeLabel = blob.size > 1024*100 ? `${mb} MB` : `${kb} KB`;
+
+    statusRow.innerHTML = `
+      <span>Layout: <b>${rows.length} row${rows.length>1?'s':''}</b> for ${n} photo${n>1?'s':''}, no crop</span>
+      <span>Canvas: <b>${canvas.width}×${canvas.height}px</b></span>
+      <span>File size: <b class="ok">${sizeLabel}</b> ${blob.size <= MAX_BYTES ? '(under 1 MB ✓)' : ''}</span>
+    `;
+
+    downloadBtn.href = currentObjectUrl;
+    downloadBtn.classList.remove('disabled');
+    downloadBtn.classList.add('ready');
+  }
+
+})();
+</script>
+
+</body>
+</html>

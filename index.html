@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDFUE — Free Online Photo Collage, PDF Merge, Split & Convert Tools</title>
+<meta name="description" content="PDFUE is a free browser-based toolkit: make photo collages, split PDFs into images, merge PDFs, convert images to PDF, and convert PDF to editable Word. No sign-up, no uploads, 100% private.">
+<meta name="keywords" content="photo collage maker, pdf merge tool, split pdf into images, image to pdf converter, pdf to word converter, free online pdf tools">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://pdfue.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PDFUE">
+<meta property="og:title" content="PDFUE — Free Online Photo Collage, PDF Merge, Split & Convert Tools">
+<meta property="og:description" content="PDFUE is a free browser-based toolkit: make photo collages, split PDFs into images, merge PDFs, convert images to PDF, and convert PDF to editable Word. No sign-up, no uploads, 100% private.">
+<meta property="og:url" content="https://pdfue.com/">
+<meta property="og:image" content="https://pdfue.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PDFUE — Free Online Photo Collage, PDF Merge, Split & Convert Tools">
+<meta name="twitter:description" content="PDFUE is a free browser-based toolkit: make photo collages, split PDFs into images, merge PDFs, convert images to PDF, and convert PDF to editable Word. No sign-up, no uploads, 100% private.">
+<meta name="twitter:image" content="https://pdfue.com/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://pdfue.com/#organization",
+      "name": "PDFUE",
+      "url": "https://pdfue.com/",
+      "logo": "https://pdfue.com/og-image.png"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://pdfue.com/#website",
+      "url": "https://pdfue.com/",
+      "name": "PDFUE",
+      "publisher": { "@id": "https://pdfue.com/#organization" }
+    },
+    {
+      "@type": "ItemList",
+      "name": "PDFUE Tools",
+      "itemListElement": [
+        {"@type": "SoftwareApplication", "position": 1, "name": "Photo Collage", "url": "https://pdfue.com/photo-collage.html", "applicationCategory": "MultimediaApplication"},
+        {"@type": "SoftwareApplication", "position": 2, "name": "Split PDF", "url": "https://pdfue.com/pdf-split.html", "applicationCategory": "MultimediaApplication"},
+        {"@type": "SoftwareApplication", "position": 3, "name": "Merge PDF", "url": "https://pdfue.com/merge-pdf.html", "applicationCategory": "MultimediaApplication"},
+        {"@type": "SoftwareApplication", "position": 4, "name": "Image to PDF", "url": "https://pdfue.com/image-to-pdf.html", "applicationCategory": "MultimediaApplication"},
+        {"@type": "SoftwareApplication", "position": 5, "name": "PDF to Word", "url": "https://pdfue.com/pdf-to-word.html", "applicationCategory": "MultimediaApplication"},
+        {"@type": "SoftwareApplication", "position": 6, "name": "Compress Image", "url": "https://pdfue.com/compress-image.html", "applicationCategory": "MultimediaApplication"},
+        {"@type": "SoftwareApplication", "position": 7, "name": "PDF to Excel", "url": "https://pdfue.com/pdf-to-excel.html", "applicationCategory": "MultimediaApplication"},
+        {"@type": "SoftwareApplication", "position": 8, "name": "HTML to PDF", "url": "https://pdfue.com/html-to-pdf.html", "applicationCategory": "MultimediaApplication"}
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b14;
+    --bg-soft:#0f1120;
+    --card:rgba(255,255,255,0.045);
+    --card-hover:rgba(255,255,255,0.075);
+    --border:rgba(255,255,255,0.09);
+    --border-hover:rgba(255,255,255,0.18);
+    --text:#f4f5fb;
+    --muted:#9498b3;
+    --violet:#2457FF;
+    --cyan:#C8FF3D;
+    --pink:#2457FF;
+    --green:#C8FF3D;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+  ::selection{background:var(--violet);color:#fff;}
+
+  body::before, body::after{
+    content:"";
+    position:fixed;
+    width:640px;height:640px;
+    border-radius:50%;
+    filter:blur(120px);
+    z-index:0;
+    opacity:.35;
+    pointer-events:none;
+  }
+  body::before{
+    top:-220px;left:-160px;
+    background:radial-gradient(circle, var(--violet) 0%, transparent 70%);
+  }
+  body::after{
+    bottom:-260px;right:-180px;
+    background:radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+  }
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:26px 24px;
+    max-width:1080px;
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+  }
+  .logo{
+    font-family:'Sora',sans-serif;
+    font-weight:800;
+    font-size:19px;
+    letter-spacing:-.01em;
+    display:flex;
+    align-items:center;
+    gap:9px;
+  background:linear-gradient(100deg, var(--cobalt, #2457FF), var(--lime, #C8FF3D));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .logo .dot{
+    width:10px;height:10px;border-radius:3px;
+    background:linear-gradient(135deg, var(--violet), var(--cyan));
+    box-shadow:0 0 16px 2px rgba(36,87,255,.55);
+  }
+  .navnote{
+    font-size:12.5px;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .navnote .pulse{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 8px 2px rgba(200,255,61,.6);
+  }
+  @media (max-width:560px){ .navnote{display:none;} }
+
+  header.hero{
+    text-align:center;
+    padding:64px 24px 30px;
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:7px 16px;
+    border-radius:100px;
+    font-size:12.5px;
+    color:var(--muted);
+    backdrop-filter:blur(8px);
+    animation:fadeUp .7s ease both;
+  }
+  .badge b{color:var(--text);font-weight:600;}
+
+  h1{
+    font-family:'Sora',sans-serif;
+    font-weight:800;
+    font-size:clamp(38px,7vw,66px);
+    letter-spacing:-.03em;
+    line-height:1.04;
+    margin:22px 0 18px;
+    animation:fadeUp .7s ease .08s both;
+  }
+  h1 .grad{
+    background:linear-gradient(100deg, var(--violet) 10%, var(--cyan) 55%, var(--pink) 95%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero-sub{
+    color:var(--muted);
+    font-size:16.5px;
+    max-width:560px;
+    margin:0 auto;
+    line-height:1.65;
+    animation:fadeUp .7s ease .16s both;
+  }
+  .hero-sub b{color:var(--text);font-weight:600;}
+
+  .scrollhint{
+    margin-top:40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    color:var(--muted);
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    animation:fadeUp .7s ease .24s both;
+  }
+  .scrollhint svg{animation:bob 1.8s ease-in-out infinite;}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(6px);}
+  }
+
+  main{padding:56px 0 40px;}
+  .section-title{
+    text-align:center;
+    font-family:'Sora',sans-serif;
+    font-weight:700;
+    font-size:26px;
+    letter-spacing:-.02em;
+    margin-bottom:8px;
+  }
+  .section-sub{
+    text-align:center;
+    color:var(--muted);
+    font-size:14.5px;
+    margin-bottom:38px;
+  }
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+  }
+
+  .card{
+    position:relative;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:28px 26px 26px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    text-decoration:none;
+    color:inherit;
+    backdrop-filter:blur(10px);
+    transition:transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s, background .25s, box-shadow .25s;
+    opacity:0;
+    animation:fadeUp .6s ease forwards;
+  }
+  .card:nth-child(1){animation-delay:.05s;}
+  .card:nth-child(2){animation-delay:.15s;}
+  .card:nth-child(3){animation-delay:.25s;}
+  .card:nth-child(4){animation-delay:.35s;}
+  .card:nth-child(5){animation-delay:.45s;}
+  .card:nth-child(6){animation-delay:.55s;}
+  .card:nth-child(7){animation-delay:.65s;}
+  .card:nth-child(8){animation-delay:.75s;}
+  .card:hover{
+    transform:translateY(-6px);
+    background:var(--card-hover);
+    border-color:var(--border-hover);
+    box-shadow:0 20px 50px -14px rgba(0,0,0,.55);
+  }
+
+  .icon-badge{
+    width:52px;height:52px;
+    border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    transition:transform .25s ease;
+  }
+  .card:hover .icon-badge{transform:scale(1.08) rotate(-4deg);}
+  .icon-badge.violet{background:linear-gradient(135deg, rgba(36,87,255,.35), rgba(36,87,255,.08)); box-shadow:inset 0 0 0 1px rgba(36,87,255,.35);}
+  .icon-badge.cyan{background:linear-gradient(135deg, rgba(200,255,61,.35), rgba(200,255,61,.08)); box-shadow:inset 0 0 0 1px rgba(200,255,61,.35);}
+  .icon-badge.pink{background:linear-gradient(135deg, rgba(36,87,255,.35), rgba(36,87,255,.08)); box-shadow:inset 0 0 0 1px rgba(36,87,255,.35);}
+  .icon-badge.green{background:linear-gradient(135deg, rgba(200,255,61,.35), rgba(200,255,61,.08)); box-shadow:inset 0 0 0 1px rgba(200,255,61,.35);}
+  .icon-badge.amber{background:linear-gradient(135deg, rgba(36,87,255,.35), rgba(36,87,255,.08)); box-shadow:inset 0 0 0 1px rgba(36,87,255,.35);}
+
+  .card h3{
+    font-family:'Sora',sans-serif;
+    font-weight:700;
+    font-size:21px;
+    letter-spacing:-.01em;
+    margin:0;
+  }
+  .card p.desc{
+    color:var(--muted);
+    font-size:13.8px;
+    line-height:1.6;
+    margin:0;
+    flex:1;
+  }
+  .card p.desc b{color:var(--text);font-weight:600;}
+
+  .tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{
+    font-size:11px;
+    padding:3px 10px;
+    border-radius:100px;
+    border:1px solid var(--border);
+    color:var(--muted);
+  }
+
+  .open-row{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-top:2px;
+    padding-top:16px;
+    border-top:1px solid var(--border);
+  }
+  .open-label{
+    font-family:'Sora',sans-serif;
+    font-weight:600;
+    font-size:13.5px;
+    color:var(--text);
+    display:flex;align-items:center;gap:7px;
+  }
+  .open-label svg{transition:transform .2s ease;}
+  .card:hover .open-label svg{transform:translateX(5px);}
+
+  .why{
+    margin-top:70px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:16px;
+  }
+  .why-item{
+    text-align:center;
+    padding:26px 18px;
+    border-radius:16px;
+    background:rgba(255,255,255,0.025);
+    border:1px solid var(--border);
+  }
+  .why-emoji{font-size:26px;margin-bottom:10px;}
+  .why-item h3{
+    font-family:'Sora',sans-serif;
+    font-size:15px;
+    margin:0 0 6px;
+    font-weight:600;
+  }
+  .why-item p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.55;
+    margin:0;
+  }
+
+  footer{
+    text-align:center;
+    padding:44px 20px 30px;
+    color:var(--muted);
+    font-size:12.5px;
+    position:relative;
+    z-index:1;
+  }
+  footer .fbrand{color:var(--text);font-weight:600;font-family:'Sora',sans-serif;}
+
+  @media (max-width:520px){
+    header.hero{padding:44px 16px 20px;}
+    main{padding:44px 0 30px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">PDFUE</div>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <a href="./blog/index.html" style="font-size:12.5px;color:var(--muted);text-decoration:none;">Blog</a>
+    <div class="navnote"><span class="pulse" aria-hidden="true"></span> Runs 100% in your browser</div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap" style="padding:0;">
+    <span class="badge">✨ <b>Free forever</b> · No sign-up · No uploads</span>
+    <h1>Photo &amp; PDF tools<br>that just <span class="grad">work.</span></h1>
+    <p class="hero-sub">A small toolkit for the stuff you do every week — collage your photos, split a PDF into images, merge PDFs, turn photos into a PDF, or compress a photo's size. <b>Fast, private, and refreshingly simple.</b></p>
+    <div class="scrollhint">
+      Explore tools
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2 class="section-title">Pick a tool</h2>
+  <div class="section-sub">Eight tools, zero friction.</div>
+
+  <div class="cards">
+
+    <a class="card" href="./photo-collage.html">
+      <div class="icon-badge violet">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6f8dff" stroke-width="1.8" aria-hidden="true">
+          <rect x="3" y="3" width="8" height="8" rx="1.5"/>
+          <rect x="13" y="3" width="8" height="8" rx="1.5"/>
+          <rect x="3" y="13" width="8" height="8" rx="1.5"/>
+          <rect x="13" y="13" width="8" height="8" rx="1.5"/>
+        </svg>
+      </div>
+      <h3>Photo Collage</h3>
+      <p class="desc">Turn any number of photos into one clean collage. Every photo shows <b>fully, no cropping</b>, laid out edge-to-edge, and it auto-compresses to <b>under 1 MB</b>.</p>
+      <div class="tags">
+        <span class="tag">multi-photo</span>
+        <span class="tag">no-crop</span>
+        <span class="tag">auto-compress</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card" href="./pdf-split.html">
+      <div class="icon-badge cyan">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dfff8f" stroke-width="1.8" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 2v6h6"/>
+        </svg>
+      </div>
+      <h3>Split PDF</h3>
+      <p class="desc">Upload a PDF up to <b>500 MB</b> and split every page into a sharp, full-resolution image. One page downloads as an image — multiple pages come as a <b>ZIP</b>.</p>
+      <div class="tags">
+        <span class="tag">pdf-to-image</span>
+        <span class="tag">bulk-zip</span>
+        <span class="tag">high-res</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card" href="./merge-pdf.html">
+      <div class="icon-badge pink">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6f8dff" stroke-width="1.8" aria-hidden="true">
+          <path d="M9 2H5a2 2 0 0 0-2 2v6M15 2h4a2 2 0 0 1 2 2v6M9 22H5a2 2 0 0 1-2-2v-6M15 22h4a2 2 0 0 0 2-2v-6"/>
+          <rect x="8" y="8" width="8" height="8" rx="1"/>
+        </svg>
+      </div>
+      <h3>Merge PDF</h3>
+      <p class="desc">Combine multiple PDFs — up to <b>500 MB</b> total — into one file. Drag to reorder before merging, quality stays <b>exactly as the originals</b>.</p>
+      <div class="tags">
+        <span class="tag">pdf-merge</span>
+        <span class="tag">reorder</span>
+        <span class="tag">lossless</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card" href="./image-to-pdf.html">
+      <div class="icon-badge green">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dfff8f" stroke-width="1.8" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5-9 9"/>
+        </svg>
+      </div>
+      <h3>Image to PDF</h3>
+      <p class="desc">Turn any number of <b>JPG or PNG</b> photos into a single PDF. Drag to reorder pages, and images embed at <b>full original quality</b>.</p>
+      <div class="tags">
+        <span class="tag">image-to-pdf</span>
+        <span class="tag">reorder</span>
+        <span class="tag">lossless</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card" href="./pdf-to-word.html">
+      <div class="icon-badge amber">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="1.8" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 2v6h6"/>
+          <path d="M9 13h6M9 17h4"/>
+        </svg>
+      </div>
+      <h3>PDF to Word</h3>
+      <p class="desc">Convert a PDF into a <b>real, editable .docx</b> — actual text rebuilt into Word paragraphs, not a picture of the page.</p>
+      <div class="tags">
+        <span class="tag">pdf-to-word</span>
+        <span class="tag">editable</span>
+        <span class="tag">real-text</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card" href="./compress-image.html">
+      <div class="icon-badge cyan">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#67e8f9" stroke-width="1.8" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5-9 9"/>
+          <path d="M3 21l6-6"/>
+        </svg>
+      </div>
+      <h3>Compress Image</h3>
+      <p class="desc">Add any JPG, PNG or WEBP photo and its file size <b>shrinks automatically</b>. Drag the quality slider to control how much.</p>
+      <div class="tags">
+        <span class="tag">image-compressor</span>
+        <span class="tag">quality-control</span>
+        <span class="tag">bulk-zip</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card" href="./pdf-to-excel.html">
+      <div class="icon-badge violet">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 2v6h6"/>
+          <path d="M8 13h2v2H8zM11 13h2v2h-2zM14 13h2v2h-2zM8 16h2v2H8zM11 16h2v2h-2zM14 16h2v2h-2z"/>
+        </svg>
+      </div>
+      <h3>PDF to Excel</h3>
+      <p class="desc">Convert a PDF into a <b>real, editable .xlsx</b> — columns line up exactly across every row, numbers kept as numbers.</p>
+      <div class="tags">
+        <span class="tag">pdf-to-excel</span>
+        <span class="tag">editable</span>
+        <span class="tag">real-tables</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card" href="./html-to-pdf.html">
+      <div class="icon-badge green">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="1.8" aria-hidden="true">
+          <polyline points="8 3 4 3 4 21 20 21 20 3 16 3"/>
+          <path d="M9 9l-3 3 3 3M15 9l3 3-3 3"/>
+        </svg>
+      </div>
+      <h3>HTML to PDF</h3>
+      <p class="desc">Add unlimited HTML files or paste code — no size limit. <b>Print for perfect accuracy</b>, or auto-download every file combined into one PDF.</p>
+      <div class="tags">
+        <span class="tag">html-to-pdf</span>
+        <span class="tag">unlimited</span>
+        <span class="tag">accurate-print</span>
+      </div>
+      <div class="open-row">
+        <span class="open-label">Open Tool
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="why">
+    <div class="why-item">
+      <div class="why-emoji">⚡</div>
+      <h3>Instant</h3>
+      <p>No waiting on uploads or servers — everything happens right in your browser.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-emoji">🔒</div>
+      <h3>Private</h3>
+      <p>Your files never leave your device. Nothing is stored, nothing is tracked.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-emoji">💛</div>
+      <h3>Free</h3>
+      <p>No accounts, no watermarks, no hidden limits. Just open a tool and go.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Made with care by <span class="fbrand">PDFUE</span> — your files never leave your browser.
+</footer>
+
+</body>
+</html>
