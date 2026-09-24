@@ -219,6 +219,21 @@
   button.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px var(--accent-glow);}
   button.primary:active{transform:scale(.97);}
   button.primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+  button.primary.outline{
+    background:transparent;color:var(--text);border:1.5px solid var(--border-hover);
+  }
+  button.primary.outline:hover{background:var(--accent-soft);box-shadow:none;}
+
+  .rangeInput{
+    width:56px;background:var(--card);border:1px solid var(--border);border-radius:8px;
+    color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:7px 8px;text-align:center;
+  }
+  .rangeInput:focus{outline:none;border-color:var(--accent);}
+  .range-hint{font-size:12px;color:var(--muted);margin-top:8px;}
+  .range-hint b{color:var(--accent);}
+
+  .download-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
+  .download-actions button{flex:1;min-width:200px;}
 
   .progress-wrap{display:none;margin-top:6px;}
   .progress-wrap.show{display:block;}
@@ -313,7 +328,7 @@
   <div class="wrap" style="padding:0;">
     <span class="eyebrow">Page Splitter</span>
     <h1>Split <span>PDF</span></h1>
-    <p class="tagline">Upload a PDF (up to <b>500 MB</b>) — every page is split out and converted to a sharp image at its <b>original resolution</b>. Files are auto-compressed for a smaller download <b>without visibly hurting quality</b>. One page downloads as an image; multiple pages download together as a <b>ZIP</b>.</p>
+    <p class="tagline">Upload a PDF (up to <b>500 MB</b>) — every page is split out and converted to a sharp image at its <b>original resolution</b>. Pick a <b>page range</b> or use all pages, then choose your output: download as images (single file or ZIP), or as <b>separate real PDF files</b>, one per page.</p>
   </div>
 </header>
 
@@ -352,7 +367,20 @@
           <button data-v="3">Maximum</button>
         </div>
       </div>
-      <button class="primary" id="convertBtn">Split &amp; Convert</button>
+      <div class="opt-group">
+        <span class="lbl">Page Range</span>
+        <div style="display:flex;align-items:center;gap:7px;">
+          <input type="number" id="fromPage" min="1" value="1" class="rangeInput">
+          <span style="color:var(--muted);font-size:12.5px;">to</span>
+          <input type="number" id="toPage" min="1" value="1" class="rangeInput">
+          <button class="ghost" id="allPagesBtn">All pages</button>
+        </div>
+      </div>
+    </div>
+    <div class="range-hint" id="rangeHint"></div>
+    <div class="download-actions">
+      <button class="primary" id="convertBtn">Download Images</button>
+      <button class="primary outline" id="convertPdfsBtn">Download Separate PDFs</button>
     </div>
     <div class="progress-wrap" id="progressWrap">
       <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
@@ -375,6 +403,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
 (function(){
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -393,6 +422,11 @@
   const formatSeg = document.getElementById('formatSeg');
   const resSeg = document.getElementById('resSeg');
   const convertBtn = document.getElementById('convertBtn');
+  const convertPdfsBtn = document.getElementById('convertPdfsBtn');
+  const fromPageInput = document.getElementById('fromPage');
+  const toPageInput = document.getElementById('toPage');
+  const allPagesBtn = document.getElementById('allPagesBtn');
+  const rangeHint = document.getElementById('rangeHint');
   const progressWrap = document.getElementById('progressWrap');
   const progressFill = document.getElementById('progressFill');
   const progressText = document.getElementById('progressText');
@@ -451,6 +485,7 @@
     controlsSection.style.display = 'none';
     clearError();
     resetStage();
+    rangeHint.textContent = '';
     fileInput.value = '';
   }
 
@@ -491,6 +526,9 @@
       currentPdf = await loadingTask.promise;
       fpages.textContent = currentPdf.numPages + (currentPdf.numPages > 1 ? ' pages' : ' page');
       controlsSection.style.display = 'block';
+      fromPageInput.min = 1; fromPageInput.max = currentPdf.numPages; fromPageInput.value = 1;
+      toPageInput.min = 1; toPageInput.max = currentPdf.numPages; toPageInput.value = currentPdf.numPages;
+      updateRangeHint();
     }catch(err){
       showError('Could not read this PDF. It may be corrupted or password-protected.');
       fpages.textContent = 'error';
@@ -513,8 +551,39 @@
     scale = parseFloat(btn.dataset.v);
   });
 
+  // ---------- Page range ----------
+  function getRange(){
+    if(!currentPdf) return { from: 1, to: 1 };
+    const numPages = currentPdf.numPages;
+    let from = parseInt(fromPageInput.value, 10) || 1;
+    let to = parseInt(toPageInput.value, 10) || numPages;
+    from = Math.min(Math.max(from, 1), numPages);
+    to = Math.min(Math.max(to, 1), numPages);
+    if(from > to) { const t = from; from = to; to = t; }
+    fromPageInput.value = from;
+    toPageInput.value = to;
+    return { from, to };
+  }
+  function updateRangeHint(){
+    if(!currentPdf) return;
+    const { from, to } = getRange();
+    const count = to - from + 1;
+    rangeHint.innerHTML = count === currentPdf.numPages
+      ? `Selected: <b>all ${count} pages</b>`
+      : `Selected: <b>${count} page${count>1?'s':''}</b> (page ${from} to ${to} of ${currentPdf.numPages})`;
+  }
+  fromPageInput.addEventListener('change', updateRangeHint);
+  toPageInput.addEventListener('change', updateRangeHint);
+  allPagesBtn.addEventListener('click', () => {
+    if(!currentPdf) return;
+    fromPageInput.value = 1;
+    toPageInput.value = currentPdf.numPages;
+    updateRangeHint();
+  });
+
   // ---------- Convert & split ----------
   convertBtn.addEventListener('click', convertPdf);
+  convertPdfsBtn.addEventListener('click', convertToSeparatePdfs);
 
   function pad(n, len){
     return String(n).padStart(len, '0');
@@ -526,23 +595,28 @@
 
   async function convertPdf(){
     if(!currentPdf) return;
+    const { from, to } = getRange();
+    const total = to - from + 1;
+
     convertBtn.disabled = true;
+    convertPdfsBtn.disabled = true;
     resetStage();
     progressWrap.classList.add('show');
     stage.classList.remove('empty');
     stage.innerHTML = '';
 
-    const numPages = currentPdf.numPages;
-    const padLen = String(numPages).length;
+    const padLen = String(currentPdf.numPages).length;
     const mime = format === 'png' ? 'image/png' : 'image/jpeg';
     const ext = format === 'png' ? 'png' : 'jpg';
     const quality = 0.92; // high quality, auto-compressed, no visible loss
 
     const pageBlobs = [];
+    let done = 0;
 
-    for(let i = 1; i <= numPages; i++){
-      progressText.innerHTML = `Rendering page <b>${i}</b> of <b>${numPages}</b>…`;
-      progressFill.style.width = `${((i-1)/numPages)*100}%`;
+    for(let i = from; i <= to; i++){
+      done++;
+      progressText.innerHTML = `Rendering page <b>${i}</b> (${done} of <b>${total}</b>)…`;
+      progressFill.style.width = `${((done-1)/total)*100}%`;
 
       const page = await currentPdf.getPage(i);
       const viewport = page.getViewport({ scale });
@@ -567,10 +641,10 @@
     }
 
     progressFill.style.width = '100%';
-    progressText.innerHTML = `<span style="color:var(--green)">Done — ${numPages} page${numPages>1?'s':''} converted.</span>`;
+    progressText.innerHTML = `<span style="color:var(--green)">Done — ${total} page${total>1?'s':''} converted.</span>`;
 
-    if(numPages === 1){
-      const { blob, name } = pageBlobs[0];
+    if(total === 1){
+      const { blob } = pageBlobs[0];
       lastObjectUrl = URL.createObjectURL(blob);
       stage.innerHTML = `<img class="result-thumb" src="${lastObjectUrl}" alt="Converted page">`;
       statusRow.innerHTML = `
@@ -579,7 +653,7 @@
         <span>Resolution scale: <b>${scale}×</b></span>
       `;
       downloadBtn.href = lastObjectUrl;
-      downloadBtn.download = `${baseName}.${ext}`;
+      downloadBtn.download = `${baseName}-page-${pad(from, padLen)}.${ext}`;
       downloadBtn.textContent = 'Download Image';
       downloadBtn.classList.remove('disabled');
       downloadBtn.classList.add('ready');
@@ -602,7 +676,7 @@
       stage.appendChild(grid);
 
       statusRow.innerHTML = `
-        <span>Pages: <b>${numPages}</b></span>
+        <span>Pages: <b>${total}</b></span>
         <span>Format: <b>${format.toUpperCase()}</b></span>
         <span>ZIP size: <b class="ok">${humanSize(zipBlob.size)}</b></span>
         <span>Resolution scale: <b>${scale}×</b></span>
@@ -615,6 +689,103 @@
     }
 
     convertBtn.disabled = false;
+    convertPdfsBtn.disabled = false;
+  }
+
+  // ---------- Convert to separate, real PDF files (one per page) ----------
+  async function convertToSeparatePdfs(){
+    if(!currentPdf || !currentFile) return;
+    const { from, to } = getRange();
+    const total = to - from + 1;
+
+    convertBtn.disabled = true;
+    convertPdfsBtn.disabled = true;
+    resetStage();
+    progressWrap.classList.add('show');
+    stage.classList.remove('empty');
+    stage.innerHTML = '';
+
+    try{
+      const { PDFDocument } = PDFLib;
+      const srcBytes = await currentFile.arrayBuffer();
+      const srcDoc = await PDFDocument.load(srcBytes);
+
+      const padLen = String(currentPdf.numPages).length;
+      const pdfBlobs = [];
+      let done = 0;
+
+      for(let i = from; i <= to; i++){
+        done++;
+        progressText.innerHTML = `Building PDF for page <b>${i}</b> (${done} of <b>${total}</b>)…`;
+        progressFill.style.width = `${((done-1)/total)*100}%`;
+
+        const newDoc = await PDFDocument.create();
+        const [copiedPage] = await newDoc.copyPages(srcDoc, [i - 1]);
+        newDoc.addPage(copiedPage);
+        const bytes = await newDoc.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        pdfBlobs.push({ name: `page-${pad(i, padLen)}.pdf`, blob });
+      }
+
+      progressFill.style.width = '100%';
+      progressText.innerHTML = `<span style="color:var(--green)">Done — ${total} separate PDF${total>1?'s':''} created.</span>`;
+
+      if(total === 1){
+        const { blob } = pdfBlobs[0];
+        lastObjectUrl = URL.createObjectURL(blob);
+        stage.innerHTML = `
+          <div class="result-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dfff8f" stroke-width="1.5" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+            </svg>
+          </div>
+          <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:16px;">${baseName}-page-${pad(from, padLen)}.pdf</div>
+        `;
+        statusRow.innerHTML = `
+          <span>Page: <b>${from}</b></span>
+          <span>File size: <b class="ok">${humanSize(blob.size)}</b></span>
+          <span>Quality: <b class="ok">original, unchanged</b></span>
+        `;
+        downloadBtn.href = lastObjectUrl;
+        downloadBtn.download = `${baseName}-page-${pad(from, padLen)}.pdf`;
+        downloadBtn.textContent = 'Download PDF';
+      } else {
+        progressText.innerHTML += ' <span style="color:var(--muted)">Zipping…</span>';
+        const zip = new JSZip();
+        pdfBlobs.forEach(p => zip.file(p.name, p.blob));
+        const zipBlob = await zip.generateAsync({ type:'blob', compression:'DEFLATE', compressionOptions:{ level:6 } });
+
+        lastObjectUrl = URL.createObjectURL(zipBlob);
+        stage.innerHTML = `
+          <div class="result-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dfff8f" stroke-width="1.5" aria-hidden="true">
+              <path d="M9 2H5a2 2 0 0 0-2 2v6M15 2h4a2 2 0 0 1 2 2v6M9 22H5a2 2 0 0 1-2-2v-6M15 22h4a2 2 0 0 0 2-2v-6"/>
+              <rect x="8" y="8" width="8" height="8" rx="1"/>
+            </svg>
+          </div>
+          <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:16px;">${baseName}-pages-pdf.zip</div>
+        `;
+        statusRow.innerHTML = `
+          <span>Separate PDFs: <b>${total}</b></span>
+          <span>ZIP size: <b class="ok">${humanSize(zipBlob.size)}</b></span>
+          <span>Quality: <b class="ok">original, unchanged</b></span>
+        `;
+        downloadBtn.href = lastObjectUrl;
+        downloadBtn.download = `${baseName}-pages-pdf.zip`;
+        downloadBtn.textContent = 'Download ZIP';
+      }
+
+      downloadBtn.classList.remove('disabled');
+      downloadBtn.classList.add('ready');
+
+    }catch(err){
+      showError('Something went wrong while building the separate PDFs.');
+      stage.classList.add('empty');
+    }
+
+    convertBtn.disabled = false;
+    convertPdfsBtn.disabled = false;
   }
 
 })();
