@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compress Image Online Free — Reduce Photo File Size | PDFUE</title>
-<meta name="description" content="Compress any JPG, PNG or WEBP photo online for free. Add a file and its size shrinks automatically — drag the quality slider to control how much, and download single files or a ZIP.">
-<meta name="keywords" content="compress image online, reduce photo file size, image compressor free, compress jpg, compress png, shrink image size">
+<title>Compress Image &amp; PDF Online Free — Reduce File Size | PDFUE</title>
+<meta name="description" content="Compress any JPG, PNG, WEBP photo or PDF online for free. Add a file and its size shrinks automatically — drag the quality slider to control how much, and download single files or a ZIP.">
+<meta name="keywords" content="compress image online, compress pdf online, reduce file size, image compressor free, pdf compressor free, shrink file size">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://pdfue.com/compress-image.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PDFUE">
-<meta property="og:title" content="Compress Image Online Free — Reduce Photo File Size">
-<meta property="og:description" content="Compress any JPG, PNG or WEBP photo online for free. Add a file and its size shrinks automatically — control quality with a slider.">
+<meta property="og:title" content="Compress Image &amp; PDF Online Free — Reduce File Size">
+<meta property="og:description" content="Compress any JPG, PNG, WEBP photo or PDF online for free. Add a file and its size shrinks automatically — control quality with a slider.">
 <meta property="og:url" content="https://pdfue.com/compress-image.html">
 <meta property="og:image" content="https://pdfue.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -21,7 +21,7 @@
   "@graph": [
     {
       "@type": "SoftwareApplication",
-      "name": "Compress Image",
+      "name": "Compress Image & PDF",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Any (runs in web browser)",
       "url": "https://pdfue.com/compress-image.html",
@@ -32,7 +32,7 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "PDFUE", "item": "https://pdfue.com/"},
-        {"@type": "ListItem", "position": 2, "name": "Compress Image", "item": "https://pdfue.com/compress-image.html"}
+        {"@type": "ListItem", "position": 2, "name": "Compress Image & PDF", "item": "https://pdfue.com/compress-image.html"}
       ]
     }
   ]
@@ -155,6 +155,12 @@
   }
   .error-msg.show{display:block;}
 
+  .note-msg{
+    color:#c9e8a0;background:rgba(200,255,61,0.08);border:1px solid rgba(200,255,61,0.3);
+    padding:12px 16px;font-size:12.5px;border-radius:12px;margin-top:14px;line-height:1.6;
+  }
+  .note-msg b{color:var(--accent);}
+
   .filelist{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
   .filelist:empty{display:none;}
   .frow{
@@ -270,16 +276,16 @@
 
 <header class="brandbar">
   <div class="wrap" style="padding:0;">
-    <span class="eyebrow">Photo Compressor</span>
-    <h1>Compress <span>Image</span></h1>
-    <p class="tagline">Add any JPG, PNG or WEBP photo and its file size <b>shrinks automatically</b>. Drag the quality slider to control how much — lower size or higher quality, your choice. One photo downloads directly; several download together as a <b>ZIP</b>.</p>
+    <span class="eyebrow">File Compressor</span>
+    <h1>Compress <span>Image &amp; PDF</span></h1>
+    <p class="tagline">Add any JPG, PNG, WEBP photo <b>or PDF</b> and its file size <b>shrinks automatically</b>. Drag the quality slider to control how much — lower size or higher quality, your choice. One file downloads directly; several download together as a <b>ZIP</b>.</p>
   </div>
 </header>
 
 <main class="wrap">
 
   <section>
-    <div class="section-label">01 · Add Photos</div>
+    <div class="section-label">01 · Add Photos or PDFs</div>
     <div class="dropzone" id="dropzone">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C8FF3D" stroke-width="1.5" style="margin-bottom:10px;" aria-hidden="true">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -287,11 +293,14 @@
         <path d="M21 15l-5-5-9 9"/>
         <path d="M3 21l6-6"/>
       </svg>
-      <div class="dz-title">Click to browse, or drag &amp; drop photos anywhere</div>
-      <div class="dz-sub">JPG, PNG or WEBP · any number of images</div>
-      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" multiple>
+      <div class="dz-title">Click to browse, or drag &amp; drop files anywhere</div>
+      <div class="dz-sub">JPG, PNG, WEBP or PDF · any number of files</div>
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,application/pdf" multiple>
     </div>
     <div class="error-msg" id="errorMsg"></div>
+    <div class="note-msg" id="pdfNote" style="display:none;">
+      <b>About PDF compression:</b> PDF pages are recompressed as high-quality images to shrink file size — great for scanned or image-heavy PDFs. The resulting PDF's text won't be selectable/searchable afterward, so skip this for a text PDF you need to keep editable.
+    </div>
 
     <div class="filelist" id="filelist"></div>
   </section>
@@ -329,11 +338,16 @@
 <footer>Everything runs in your browser — your photos are never uploaded to a server.</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
 (function(){
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
   const dropzone = document.getElementById('dropzone');
   const fileInput = document.getElementById('fileInput');
   const errorMsg = document.getElementById('errorMsg');
+  const pdfNote = document.getElementById('pdfNote');
   const filelist = document.getElementById('filelist');
   const controlsSection = document.getElementById('controlsSection');
   const qualitySlider = document.getElementById('qualitySlider');
@@ -349,7 +363,7 @@
   const statusRow = document.getElementById('statusRow');
   const downloadBtn = document.getElementById('downloadBtn');
 
-  let files = []; // { file, url, resultBlob, resultUrl }
+  let files = []; // { file, url, type: 'image'|'pdf', resultBlob, resultUrl }
   let zipObjectUrl = null;
 
   function humanSize(bytes){
@@ -358,6 +372,7 @@
   }
   function showError(msg){ errorMsg.textContent = msg; errorMsg.classList.add('show'); }
   function clearError(){ errorMsg.classList.remove('show'); errorMsg.textContent=''; }
+  function updatePdfNote(){ pdfNote.style.display = files.some(f => f.type === 'pdf') ? 'block' : 'none'; }
 
   dropzone.addEventListener('click', () => fileInput.click());
   fileInput.addEventListener('change', e => { addFiles(e.target.files); fileInput.value=''; });
@@ -378,15 +393,18 @@
   function addFiles(fileListInput){
     clearError();
     const incoming = Array.from(fileListInput).filter(f =>
-      /^image\/(jpeg|png|webp)$/.test(f.type) || /\.(jpe?g|png|webp)$/i.test(f.name)
+      /^image\/(jpeg|png|webp)$/.test(f.type) || /\.(jpe?g|png|webp)$/i.test(f.name) ||
+      f.type === 'application/pdf' || /\.pdf$/i.test(f.name)
     );
-    if(!incoming.length){ showError('Please choose JPG, PNG or WEBP images only.'); return; }
+    if(!incoming.length){ showError('Please choose JPG, PNG, WEBP or PDF files only.'); return; }
     incoming.forEach(f => {
-      files.push({ file: f, url: URL.createObjectURL(f), resultBlob: null, resultUrl: null });
+      const isPdf = f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
+      files.push({ file: f, url: URL.createObjectURL(f), type: isPdf ? 'pdf' : 'image', resultBlob: null, resultUrl: null });
     });
     renderList();
     controlsSection.style.display = files.length ? 'block' : 'none';
     resetResultStage();
+    updatePdfNote();
   }
 
   function removeFile(idx){
@@ -396,6 +414,7 @@
     renderList();
     controlsSection.style.display = files.length ? 'block' : 'none';
     resetResultStage();
+    updatePdfNote();
   }
 
   clearAllBtn.addEventListener('click', () => {
@@ -405,6 +424,7 @@
     controlsSection.style.display = 'none';
     resetResultStage();
     clearError();
+    updatePdfNote();
   });
 
   qualitySlider.addEventListener('input', () => {
@@ -425,8 +445,15 @@
            <span class="pct">-${Math.max(0, Math.round((1 - f.resultBlob.size/f.file.size)*100))}%</span>
            <a class="dl-single" href="${f.resultUrl}" download="${compressedName(f.file.name)}">Download</a>`
         : `<span class="fsizes">${humanSize(f.file.size)}</span>`;
+      const thumb = f.type === 'pdf'
+        ? `<span class="fthumb" style="display:flex;align-items:center;justify-content:center;">
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C8FF3D" stroke-width="1.6" aria-hidden="true">
+               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>
+             </svg>
+           </span>`
+        : `<span class="fthumb"><img src="${f.url}"></span>`;
       row.innerHTML = `
-        <span class="fthumb"><img src="${f.url}"></span>
+        ${thumb}
         <span class="fname">${f.file.name}</span>
         ${sizeInfo}
         <button class="rm" title="Remove">&times;</button>
@@ -436,11 +463,12 @@
     });
 
     const totalBytes = files.reduce((s, x) => s + x.file.size, 0);
-    totalsText.innerHTML = `<b>${files.length}</b> photo${files.length!==1?'s':''} · <b>${humanSize(totalBytes)}</b> total`;
+    totalsText.innerHTML = `<b>${files.length}</b> file${files.length!==1?'s':''} · <b>${humanSize(totalBytes)}</b> total`;
     compressBtn.disabled = files.length < 1;
   }
 
   function compressedName(name){
+    if(/\.pdf$/i.test(name)) return name.replace(/\.pdf$/i, '-compressed.pdf');
     return name.replace(/\.(jpe?g|png|webp)$/i, m => '-compressed' + m);
   }
 
@@ -495,6 +523,48 @@
     return blob;
   }
 
+  async function compressPdfOne(fileEntry, quality){
+    const buf = await fileEntry.file.arrayBuffer();
+    const srcPdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    const { PDFDocument } = PDFLib;
+    const outDoc = await PDFDocument.create();
+
+    const scale = 1.5; // fixed render resolution — balances size vs. sharpness
+
+    for(let i = 1; i <= srcPdf.numPages; i++){
+      const page = await srcPdf.getPage(i);
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(viewport.width);
+      canvas.height = Math.round(viewport.height);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+
+      const jpegBytes = await new Promise(res => canvas.toBlob(b => {
+        const reader = new FileReader();
+        reader.onload = () => res(new Uint8Array(reader.result));
+        reader.readAsArrayBuffer(b);
+      }, 'image/jpeg', quality));
+
+      const embedded = await outDoc.embedJpg(jpegBytes);
+      // Divide back by the render scale so the output page matches the ORIGINAL page size exactly
+      const pageW = canvas.width / scale;
+      const pageH = canvas.height / scale;
+      const outPage = outDoc.addPage([pageW, pageH]);
+      outPage.drawImage(embedded, { x: 0, y: 0, width: pageW, height: pageH });
+
+      canvas.width = 0; canvas.height = 0;
+    }
+
+    const outBytes = await outDoc.save();
+    let blob = new Blob([outBytes], { type: 'application/pdf' });
+    // Never hand back something larger than the original
+    if(blob.size >= fileEntry.file.size) blob = fileEntry.file;
+    return blob;
+  }
+
   compressBtn.addEventListener('click', compressAll);
 
   async function compressAll(){
@@ -515,19 +585,19 @@
       progressFill.style.width = `${(i/files.length)*100}%`;
 
       try{
-        const blob = await compressOne(f, quality);
+        const blob = f.type === 'pdf' ? await compressPdfOne(f, quality) : await compressOne(f, quality);
         if(f.resultUrl) URL.revokeObjectURL(f.resultUrl);
         f.resultBlob = blob;
         f.resultUrl = URL.createObjectURL(blob);
       }catch(err){
-        showError(`Could not compress "${f.file.name}" — it may not be a valid image.`);
+        showError(`Could not compress "${f.file.name}" — it may not be a valid ${f.type === 'pdf' ? 'PDF' : 'image'}.`);
       }
       totalBefore += f.file.size;
       totalAfter += (f.resultBlob ? f.resultBlob.size : f.file.size);
     }
 
     progressFill.style.width = '100%';
-    progressText.innerHTML = `<span style="color:var(--green)">Done — ${files.length} photo${files.length>1?'s':''} compressed.</span>`;
+    progressText.innerHTML = `<span style="color:var(--green)">Done — ${files.length} file${files.length>1?'s':''} compressed.</span>`;
 
     renderList();
     stage.classList.add('empty');
@@ -543,14 +613,14 @@
       const f = files[0];
       downloadBtn.href = f.resultUrl;
       downloadBtn.download = compressedName(f.file.name);
-      downloadBtn.textContent = 'Download Photo';
+      downloadBtn.textContent = f.type === 'pdf' ? 'Download PDF' : 'Download Photo';
     } else {
       const zip = new JSZip();
       files.forEach(f => zip.file(compressedName(f.file.name), f.resultBlob));
       const zipBlob = await zip.generateAsync({ type:'blob', compression:'DEFLATE', compressionOptions:{ level:6 } });
       zipObjectUrl = URL.createObjectURL(zipBlob);
       downloadBtn.href = zipObjectUrl;
-      downloadBtn.download = 'compressed-photos.zip';
+      downloadBtn.download = 'compressed-files.zip';
       downloadBtn.textContent = 'Download All (ZIP)';
     }
     downloadBtn.classList.remove('disabled');
