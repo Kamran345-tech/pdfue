@@ -299,7 +299,7 @@
     </div>
     <div class="error-msg" id="errorMsg"></div>
     <div class="note-msg" id="pdfNote" style="display:none;">
-      <b>About PDF compression:</b> PDF pages are recompressed as high-quality images to shrink file size — great for scanned or image-heavy PDFs. The resulting PDF's text won't be selectable/searchable afterward, so skip this for a text PDF you need to keep editable.
+      <b>About PDF compression:</b> only the photos embedded inside your PDF get recompressed at your chosen quality — text, fonts and layout stay exactly as they are, still selectable and searchable. If a PDF is mostly text/vector graphics with no large embedded photos, there may be little left to shrink.
     </div>
 
     <div class="filelist" id="filelist"></div>
@@ -338,11 +338,9 @@
 <footer>Everything runs in your browser — your photos are never uploaded to a server.</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
 (function(){
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
   const dropzone = document.getElementById('dropzone');
   const fileInput = document.getElementById('fileInput');
@@ -525,44 +523,72 @@
 
   async function compressPdfOne(fileEntry, quality){
     const buf = await fileEntry.file.arrayBuffer();
-    const srcPdf = await pdfjsLib.getDocument({ data: buf }).promise;
-    const { PDFDocument } = PDFLib;
-    const outDoc = await PDFDocument.create();
+    const { PDFDocument, PDFName, PDFDict, PDFRawStream, PDFNumber, PDFRef } = PDFLib;
+    const pdfDoc = await PDFDocument.load(buf, { ignoreEncryption: true, updateMetadata: false });
 
-    const scale = 1.5; // fixed render resolution — balances size vs. sharpness
+    const pages = pdfDoc.getPages();
+    let imagesTouched = 0;
 
-    for(let i = 1; i <= srcPdf.numPages; i++){
-      const page = await srcPdf.getPage(i);
-      const viewport = page.getViewport({ scale });
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.round(viewport.width);
-      canvas.height = Math.round(viewport.height);
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      await page.render({ canvasContext: ctx, viewport }).promise;
+    for(const page of pages){
+      let resources;
+      try{ resources = page.node.Resources(); }catch(e){ continue; }
+      if(!resources) continue;
 
-      const jpegBytes = await new Promise(res => canvas.toBlob(b => {
-        const reader = new FileReader();
-        reader.onload = () => res(new Uint8Array(reader.result));
-        reader.readAsArrayBuffer(b);
-      }, 'image/jpeg', quality));
+      let xObjects;
+      try{ xObjects = resources.lookupMaybe(PDFName.of('XObject'), PDFDict); }catch(e){ continue; }
+      if(!xObjects) continue;
 
-      const embedded = await outDoc.embedJpg(jpegBytes);
-      // Divide back by the render scale so the output page matches the ORIGINAL page size exactly
-      const pageW = canvas.width / scale;
-      const pageH = canvas.height / scale;
-      const outPage = outDoc.addPage([pageW, pageH]);
-      outPage.drawImage(embedded, { x: 0, y: 0, width: pageW, height: pageH });
+      for(const [, value] of xObjects.entries()){
+        try{
+          const isRef = value instanceof PDFRef;
+          const ref = isRef ? value : null;
+          const obj = isRef ? pdfDoc.context.lookup(value) : value;
+          if(!ref || !(obj instanceof PDFRawStream)) continue;
 
-      canvas.width = 0; canvas.height = 0;
+          const subtype = obj.dict.get(PDFName.of('Subtype'));
+          if(subtype !== PDFName.of('Image')) continue;
+
+          const filter = obj.dict.get(PDFName.of('Filter'));
+          if(filter !== PDFName.of('DCTDecode')) continue; // only touch existing JPEGs — safest, most common case
+
+          const originalBytes = obj.getContents();
+          if(!originalBytes || originalBytes.length < 6000) continue; // skip tiny images, not worth it
+
+          const bitmap = await createImageBitmap(new Blob([originalBytes], { type: 'image/jpeg' })).catch(() => null);
+          if(!bitmap) continue;
+
+          const canvas = document.createElement('canvas');
+          canvas.width = bitmap.width;
+          canvas.height = bitmap.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(bitmap, 0, 0);
+          bitmap.close && bitmap.close();
+
+          const newBlob = await new Promise(res => canvas.toBlob(res, 'image/jpeg', quality));
+          const newBytes = new Uint8Array(await newBlob.arrayBuffer());
+          canvas.width = 0; canvas.height = 0;
+
+          if(newBytes.length >= originalBytes.length) continue; // keep original if we didn't actually shrink it
+
+          obj.dict.set(PDFName.of('Length'), PDFNumber.of(newBytes.length));
+          const newStream = PDFRawStream.of(obj.dict, newBytes);
+          pdfDoc.context.assign(ref, newStream);
+          imagesTouched++;
+        }catch(e){
+          continue; // skip this image on any error — never let one bad image break the whole file
+        }
+      }
     }
 
-    const outBytes = await outDoc.save();
+    if(imagesTouched === 0){
+      return { blob: fileEntry.file, imagesTouched };
+    }
+
+    const outBytes = await pdfDoc.save({ useObjectStreams: true });
     let blob = new Blob([outBytes], { type: 'application/pdf' });
     // Never hand back something larger than the original
     if(blob.size >= fileEntry.file.size) blob = fileEntry.file;
-    return blob;
+    return { blob, imagesTouched };
   }
 
   compressBtn.addEventListener('click', compressAll);
@@ -578,6 +604,7 @@
 
     const quality = Number(qualitySlider.value) / 100;
     let totalBefore = 0, totalAfter = 0;
+    let noImagesFiles = [];
 
     for(let i = 0; i < files.length; i++){
       const f = files[i];
@@ -585,10 +612,18 @@
       progressFill.style.width = `${(i/files.length)*100}%`;
 
       try{
-        const blob = f.type === 'pdf' ? await compressPdfOne(f, quality) : await compressOne(f, quality);
-        if(f.resultUrl) URL.revokeObjectURL(f.resultUrl);
-        f.resultBlob = blob;
-        f.resultUrl = URL.createObjectURL(blob);
+        if(f.type === 'pdf'){
+          const result = await compressPdfOne(f, quality);
+          if(f.resultUrl) URL.revokeObjectURL(f.resultUrl);
+          f.resultBlob = result.blob;
+          f.resultUrl = URL.createObjectURL(result.blob);
+          if(result.imagesTouched === 0) noImagesFiles.push(f.file.name);
+        } else {
+          const blob = await compressOne(f, quality);
+          if(f.resultUrl) URL.revokeObjectURL(f.resultUrl);
+          f.resultBlob = blob;
+          f.resultUrl = URL.createObjectURL(blob);
+        }
       }catch(err){
         showError(`Could not compress "${f.file.name}" — it may not be a valid ${f.type === 'pdf' ? 'PDF' : 'image'}.`);
       }
@@ -608,6 +643,10 @@
       <span>After: <b class="ok">${humanSize(totalAfter)}</b></span>
       <span>Saved: <b class="ok">${savedPct}%</b></span>
     `;
+
+    if(noImagesFiles.length){
+      statusRow.innerHTML += `<br><span style="color:var(--muted);">No compressible images found in <b>${noImagesFiles.join(', ')}</b> — likely already text/vector-based, returned unchanged.</span>`;
+    }
 
     if(files.length === 1){
       const f = files[0];
