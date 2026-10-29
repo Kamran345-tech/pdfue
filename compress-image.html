@@ -7,14 +7,14 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' blob: data:; worker-src 'self' blob: https://cdnjs.cloudflare.com; frame-src 'self' blob: data: about:; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compress Image &amp; PDF Online Free — Reduce File Size | PDFUE</title>
+<title>Compress Any File Online Free — PDF, Photos, PowerPoint, Word, Excel | PDFUE</title>
 <meta name="description" content="Compress any JPG, PNG, WEBP photo or PDF online for free. Add a file and its size shrinks automatically — drag the quality slider to control how much, and download single files or a ZIP.">
 <meta name="keywords" content="compress image online, compress pdf online, reduce file size, image compressor free, pdf compressor free, shrink file size">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://pdfue.com/compress-image.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PDFUE">
-<meta property="og:title" content="Compress Image &amp; PDF Online Free — Reduce File Size">
+<meta property="og:title" content="Compress Any File Online Free — PDF, Photos, PowerPoint, Word, Excel">
 <meta property="og:description" content="Compress any JPG, PNG, WEBP photo or PDF online for free. Add a file and its size shrinks automatically — control quality with a slider.">
 <meta property="og:url" content="https://pdfue.com/compress-image.html">
 <meta property="og:image" content="https://pdfue.com/og-image.png">
@@ -25,7 +25,7 @@
   "@graph": [
     {
       "@type": "SoftwareApplication",
-      "name": "Compress Image & PDF",
+      "name": "Compress Any File",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Any (runs in web browser)",
       "url": "https://pdfue.com/compress-image.html",
@@ -36,7 +36,7 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "PDFUE", "item": "https://pdfue.com/"},
-        {"@type": "ListItem", "position": 2, "name": "Compress Image & PDF", "item": "https://pdfue.com/compress-image.html"}
+        {"@type": "ListItem", "position": 2, "name": "Compress Any File", "item": "https://pdfue.com/compress-image.html"}
       ]
     }
   ]
@@ -561,15 +561,15 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
 <header class="brandbar">
   <div class="wrap" style="padding:0;">
     <span class="eyebrow">File Compressor</span>
-    <h1>Compress <span>Image &amp; PDF</span></h1>
-    <p class="tagline">Add any JPG, PNG, WEBP photo <b>or PDF</b> and its file size <b>shrinks automatically</b>. Drag the quality slider to control how much — lower size or higher quality, your choice. One file downloads directly; several download together as a <b>ZIP</b>.</p>
+    <h1>Compress <span>Any File</span></h1>
+    <p class="tagline">Add <b>PDF, photos, PowerPoint, Word, Excel</b> or any other file and its size <b>shrinks automatically</b>. Drag the quality slider to control how much — lower size or higher quality, your choice. One file downloads directly; several download together as a <b>ZIP</b>.</p>
   </div>
 </header>
 
 <main class="wrap">
 
   <section>
-    <div class="section-label">01 · Add Photos or PDFs</div>
+    <div class="section-label">01 · Add Your Files</div>
     <div class="dropzone" id="dropzone">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#C8FF3D" stroke-width="1.5" style="margin-bottom:10px;" aria-hidden="true">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -578,13 +578,11 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
         <path d="M3 21l6-6"/>
       </svg>
       <div class="dz-title">Click to browse, or drag &amp; drop files anywhere</div>
-      <div class="dz-sub">JPG, PNG, WEBP or PDF · any number of files</div>
-      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,application/pdf" multiple>
+      <div class="dz-sub">PDF · JPG/PNG/WEBP · PPTX/DOCX/XLSX · any other file · any number of files</div>
+      <input type="file" id="fileInput" multiple>
     </div>
     <div class="error-msg" id="errorMsg"></div>
-    <div class="note-msg" id="pdfNote" style="display:none;">
-      <b>About PDF compression:</b> only the photos embedded inside your PDF get recompressed at your chosen quality — text, fonts and layout stay exactly as they are, still selectable and searchable. If a PDF is mostly text/vector graphics with no large embedded photos, there may be little left to shrink.
-    </div>
+    <div class="note-msg" id="pdfNote" style="display:none;"></div>
 
     <div class="filelist" id="filelist"></div>
   </section>
@@ -742,7 +740,7 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
   const statusRow = document.getElementById('statusRow');
   const downloadBtn = document.getElementById('downloadBtn');
 
-  let files = []; // { file, url, type: 'image'|'pdf', resultBlob, resultUrl }
+  let files = []; // { file, url, type: 'image'|'pdf'|'office'|'other', resultBlob, resultUrl }
   let zipObjectUrl = null;
 
   function humanSize(bytes){
@@ -751,7 +749,20 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
   }
   function showError(msg){ errorMsg.textContent = msg; errorMsg.classList.add('show'); }
   function clearError(){ errorMsg.classList.remove('show'); errorMsg.textContent=''; }
-  function updatePdfNote(){ pdfNote.style.display = files.some(f => f.type === 'pdf') ? 'block' : 'none'; }
+  const MAX_BYTES = 500 * 1024 * 1024;
+  function kindOf(f){
+    if(f.type === 'application/pdf' || /\.pdf$/i.test(f.name)) return 'pdf';
+    if(/^image\/(jpeg|png|webp)$/.test(f.type) || /\.(jpe?g|png|webp)$/i.test(f.name)) return 'image';
+    if(/\.(pptx|pptm|docx|docm|xlsx|xlsm|odp|odt|ods)$/i.test(f.name)) return 'office';
+    return 'other';
+  }
+  function updatePdfNote(){
+    const k = new Set(files.map(f => f.type)); const m = [];
+    if(k.has('pdf')) m.push('<b>PDF:</b> only the photos embedded inside the PDF are recompressed at your chosen quality — text, fonts and layout stay exactly as they are. A PDF that is mostly text may shrink very little.');
+    if(k.has('office')) m.push('<b>PowerPoint / Word / Excel:</b> the pictures inside the file are recompressed and the file is repacked. Slides, text and formatting are untouched.');
+    if(k.has('other')) m.push('<b>Other files:</b> packed into a ZIP at maximum compression. Already-compressed formats (video, MP3, ZIP, old .ppt/.doc/.xls) shrink little or not at all — if nothing is gained you get the original back.');
+    pdfNote.innerHTML = m.join('<br>'); pdfNote.style.display = m.length ? 'block' : 'none';
+  }
 
   dropzone.addEventListener('click', () => fileInput.click());
   fileInput.addEventListener('change', e => { addFiles(e.target.files); fileInput.value=''; });
@@ -771,14 +782,14 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
 
   function addFiles(fileListInput){
     clearError();
-    const incoming = Array.from(fileListInput).filter(f =>
-      /^image\/(jpeg|png|webp)$/.test(f.type) || /\.(jpe?g|png|webp)$/i.test(f.name) ||
-      f.type === 'application/pdf' || /\.pdf$/i.test(f.name)
-    );
-    if(!incoming.length){ showError('Please choose JPG, PNG, WEBP or PDF files only.'); return; }
+    let incoming = Array.from(fileListInput);
+    const tooBig = incoming.filter(f => f.size > MAX_BYTES);
+    if(tooBig.length) showError('Skipped (over 500 MB): ' + tooBig.map(f => f.name).join(', '));
+    incoming = incoming.filter(f => f.size <= MAX_BYTES && f.size > 0);
+    if(!incoming.length){ if(!tooBig.length) showError('Please choose at least one non-empty file.'); return; }
     incoming.forEach(f => {
-      const isPdf = f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
-      files.push({ file: f, url: URL.createObjectURL(f), type: isPdf ? 'pdf' : 'image', resultBlob: null, resultUrl: null });
+      const t = kindOf(f);
+      files.push({ file: f, url: t === 'image' ? URL.createObjectURL(f) : '', type: t, resultBlob: null, resultUrl: null });
     });
     renderList();
     controlsSection.style.display = files.length ? 'block' : 'none';
@@ -822,9 +833,9 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
       const sizeInfo = f.resultBlob
         ? `<span class="fsizes"><span>${humanSize(f.file.size)}</span><span class="arrow">&rarr;</span><span class="new">${humanSize(f.resultBlob.size)}</span></span>
            <span class="pct">-${Math.max(0, Math.round((1 - f.resultBlob.size/f.file.size)*100))}%</span>
-           <a class="dl-single" href="${f.resultUrl}" download="${esc(compressedName(f.file.name))}">Download</a>`
+           <a class="dl-single" href="${f.resultUrl}" download="${esc(compressedName(f.file.name, f))}">Download</a>`
         : `<span class="fsizes">${humanSize(f.file.size)}</span>`;
-      const thumb = f.type === 'pdf'
+      const thumb = f.type !== 'image'
         ? `<span class="fthumb" style="display:flex;align-items:center;justify-content:center;">
              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C8FF3D" stroke-width="1.6" aria-hidden="true">
                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>
@@ -846,9 +857,10 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
     compressBtn.disabled = files.length < 1;
   }
 
-  function compressedName(name){
-    if(/\.pdf$/i.test(name)) return name.replace(/\.pdf$/i, '-compressed.pdf');
-    return name.replace(/\.(jpe?g|png|webp)$/i, m => '-compressed' + m);
+  function compressedName(name, entry){
+    if(entry && entry.type === 'other') return entry.zipped ? name + '.zip' : name;
+    const m = name.match(/^(.*?)(\.[^.]+)$/);
+    return m ? m[1] + '-compressed' + m[2] : name + '-compressed';
   }
 
   function resetResultStage(){
@@ -972,6 +984,45 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
     return { blob, imagesTouched };
   }
 
+  // Office/OpenDocument files are ZIPs: recompress the pictures inside, then repack at max deflate.
+  async function compressOfficeOne(fileEntry, quality){
+    const zip = await JSZip.loadAsync(fileEntry.file);
+    let touched = 0;
+    for(const name of Object.keys(zip.files)){
+      const zf = zip.files[name];
+      if(zf.dir || !/(^|\/)(media|Pictures)\/[^/]+\.(jpe?g|png)$/i.test(name)) continue;
+      try{
+        const orig = await zf.async('uint8array');
+        if(orig.length < 20000) continue;
+        const isPng = /\.png$/i.test(name);
+        const bmp = await createImageBitmap(new Blob([orig], { type: isPng ? 'image/png' : 'image/jpeg' })).catch(() => null);
+        if(!bmp) continue;
+        const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
+        const cx = c.getContext('2d');
+        if(!isPng){ cx.fillStyle = '#fff'; cx.fillRect(0,0,c.width,c.height); }
+        cx.drawImage(bmp, 0, 0); bmp.close && bmp.close();
+        const nb = await new Promise(r => c.toBlob(r, isPng ? 'image/png' : 'image/jpeg', quality));
+        c.width = 0; c.height = 0;
+        if(!nb || nb.size >= orig.length) continue;
+        zip.file(name, await nb.arrayBuffer(), { compression: 'DEFLATE', binary: true });
+        touched++;
+      }catch(e){ continue; }
+    }
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 9 },
+      mimeType: fileEntry.file.type || 'application/octet-stream' });
+    return { blob: blob.size >= fileEntry.file.size ? fileEntry.file : blob, imagesTouched: touched };
+  }
+
+  // Any other file: ZIP it at max compression; keep the original if nothing is gained.
+  async function compressOtherOne(fileEntry){
+    const zip = new JSZip();
+    zip.file(fileEntry.file.name, fileEntry.file, { compression: 'DEFLATE', compressionOptions: { level: 9 } });
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 9 } });
+    const gained = blob.size < fileEntry.file.size;
+    fileEntry.zipped = gained;
+    return { blob: gained ? blob : fileEntry.file, imagesTouched: gained ? 1 : 0 };
+  }
+
   compressBtn.addEventListener('click', compressAll);
 
   async function compressAll(){
@@ -999,6 +1050,12 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
           f.resultBlob = result.blob;
           f.resultUrl = URL.createObjectURL(result.blob);
           if(result.imagesTouched === 0) noImagesFiles.push(f.file.name);
+        } else if(f.type === 'office' || f.type === 'other'){
+          const result = f.type === 'office' ? await compressOfficeOne(f, quality) : await compressOtherOne(f);
+          if(f.resultUrl) URL.revokeObjectURL(f.resultUrl);
+          f.resultBlob = result.blob;
+          f.resultUrl = URL.createObjectURL(result.blob);
+          if(result.imagesTouched === 0) noImagesFiles.push(f.file.name);
         } else {
           const blob = await compressOne(f, quality);
           if(f.resultUrl) URL.revokeObjectURL(f.resultUrl);
@@ -1006,7 +1063,7 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
           f.resultUrl = URL.createObjectURL(blob);
         }
       }catch(err){
-        showError(`Could not compress "${f.file.name}" — it may not be a valid ${f.type === 'pdf' ? 'PDF' : 'image'}.`);
+        showError(`Could not compress "${f.file.name}" — it may be damaged or not a valid ${f.type === 'pdf' ? 'PDF' : f.type === 'image' ? 'image' : 'file'}.`);
       }
       totalBefore += f.file.size;
       totalAfter += (f.resultBlob ? f.resultBlob.size : f.file.size);
@@ -1026,17 +1083,17 @@ body.dark .catcard:hover,body.dark .catcard.selected{border-color:var(--purple);
     `;
 
     if(noImagesFiles.length){
-      statusRow.innerHTML += `<br><span style="color:var(--muted);">No compressible images found in <b>${esc(noImagesFiles.join(', '))}</b> — likely already text/vector-based, returned unchanged.</span>`;
+      statusRow.innerHTML += `<br><span style="color:var(--muted);">Nothing more to shrink in <b>${esc(noImagesFiles.join(', '))}</b> — already compact, returned unchanged.</span>`;
     }
 
     if(files.length === 1){
       const f = files[0];
       downloadBtn.href = f.resultUrl;
-      downloadBtn.download = compressedName(f.file.name);
-      downloadBtn.textContent = f.type === 'pdf' ? 'Download PDF' : 'Download Photo';
+      downloadBtn.download = compressedName(f.file.name, f);
+      downloadBtn.textContent = f.type === 'pdf' ? 'Download PDF' : f.type === 'image' ? 'Download Photo' : 'Download File';
     } else {
       const zip = new JSZip();
-      files.forEach(f => zip.file(compressedName(f.file.name), f.resultBlob));
+      files.forEach(f => zip.file(compressedName(f.file.name, f), f.resultBlob));
       const zipBlob = await zip.generateAsync({ type:'blob', compression:'DEFLATE', compressionOptions:{ level:6 } });
       zipObjectUrl = URL.createObjectURL(zipBlob);
       downloadBtn.href = zipObjectUrl;
